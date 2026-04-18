@@ -55,14 +55,18 @@ export default function StepExport() {
     }
   };
 
-  const sample = students.slice(0, isVertical ? 6 : 4);
+  const perPagePreview = Math.max(
+    1,
+    Math.floor((210 - 8) / (dims.w + 4)) * Math.floor((297 - 8) / (dims.h + 4)),
+  );
+  const sample = students.slice(0, Math.min(6, students.length));
 
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-semibold tracking-tight">Preview & download</h2>
         <p className="text-muted-foreground mt-1">
-          {students.length} cards · {isVertical ? "9" : "10"} per A4 page · {isVertical ? "Portrait" : "Landscape"} layout.
+          {students.length} cards · {dims.w}×{dims.h}mm · ~{perPagePreview} per A4 page.
         </p>
       </div>
 
