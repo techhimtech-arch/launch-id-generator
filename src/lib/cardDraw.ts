@@ -209,7 +209,7 @@ function drawVerticalClassic({ doc, x, y, student, photo, mapping, design }: Dra
 
 /* ============ TEMPLATE: HORIZONTAL CLASSIC ============ */
 function drawHorizontalClassic({ doc, x, y, student, photo, mapping, design }: DrawCtx) {
-  const W = 86, H = 54;
+  const W = design.customWidth, H = design.customHeight;
   const rgb = hexToRgb(design.accentColor);
 
   doc.setDrawColor(220);
@@ -307,7 +307,7 @@ function drawHorizontalClassic({ doc, x, y, student, photo, mapping, design }: D
 
 /* ============ TEMPLATE: VERTICAL MODERN ============ */
 function drawVerticalModern({ doc, x, y, student, photo, mapping, design }: DrawCtx) {
-  const W = 54, H = 86;
+  const W = design.customWidth, H = design.customHeight;
   const rgb = hexToRgb(design.accentColor);
 
   doc.setDrawColor(230);
@@ -375,7 +375,7 @@ function drawVerticalModern({ doc, x, y, student, photo, mapping, design }: Draw
 
 /* ============ TEMPLATE: HORIZONTAL MODERN ============ */
 function drawHorizontalModern({ doc, x, y, student, photo, mapping, design }: DrawCtx) {
-  const W = 86, H = 54;
+  const W = design.customWidth, H = design.customHeight;
   const rgb = hexToRgb(design.accentColor);
 
   doc.setDrawColor(230);
