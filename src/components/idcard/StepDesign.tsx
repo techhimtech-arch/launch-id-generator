@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeft, ArrowRight, Upload, X } from "lucide-react";
 import { FIELD_LABELS, type CardTemplate, type FieldKey } from "@/types/idcard";
 import { cn } from "@/lib/utils";
+import CustomEditor from "./CustomEditor";
 
 const TEMPLATES: { key: CardTemplate; label: string; desc: string }[] = [
   { key: "vertical-classic", label: "Vertical · Classic", desc: "Photo top, accent corner, footer band" },
