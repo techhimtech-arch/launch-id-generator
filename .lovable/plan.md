@@ -1,49 +1,89 @@
 
+Problem ka root cause preview vs PDF rendering difference hai:
 
-## Problem
-
-`VerticalClassic` template mein principal signature ka koi slot hi nahi hai. Aur jab "Customize this template" karte ho toh `templateToCustomElements()` mein bhi vertical-classic ke andar signature element generate nahi hota (sirf horizontal-classic mein hota hai). Isi wajah se signature upload karne ke baad bhi card pe nahi dikhta, aur custom mode mein bhi missing rehta hai. Saath hi `vertical-modern` aur `horizontal-modern` mein bhi signature missing hai.
-
-Custom mode mein "+ Field" dropdown sirf un fields ko dikhata hai jo Step 2 mein mapped hain — agar koi field add nahi ho rahi toh wo mapping issue hai (separate, niche cover karunga).
+- Preview mein browser direct `<img>` se `logoDataUrl` aur `signatureDataUrl` dikha deta hai.
+- PDF export mein `jsPDF.addImage()` use ho raha hai, jo raw uploaded image formats + rotated export path dono ke saath brittle hai.
+- Current code mein do risky points hain:
+  1. `StepDesign.tsx` raw file ko direct Data URL ke form mein store kar raha hai, chahe wo PNG/JPEG ho ya WEBP/SVG.
+  2. `StepExport.tsx` default `autoRotate=true` ke saath `withRotatedCard()` use karta hai, aur rotated PDF path mein image assets unreliable ho rahe hain.
 
 ## Fix plan
 
-### 1. `VerticalClassic.tsx` mein signature + principal name footer add karo
-- Footer band ke upar ek chhota signature row: right side mein signature image (height ~24px) + "Principal" label, agar `design.signatureDataUrl` ya `design.principalName` set hai.
-- Layout: Fields list ke neeche `mt-auto` se push karke, footer accent band ke just upar.
-- Agar dono empty hain toh kuch render mat karo (clean fallback).
+### 1. Logo/signature upload ko PDF-safe format mein normalize karna
+File: `src/components/idcard/StepDesign.tsx`
 
-### 2. `VerticalModern.tsx` aur `HorizontalModern.tsx` mein bhi same signature slot add karo
-- Consistency ke liye chaaron built-in templates mein principal signature dikhe.
-- Vertical-modern: footer area mein center-right.
-- Horizontal-modern: bottom-right of right text panel.
+- Logo aur signature upload ke time raw file ko direct store nahi karunga.
+- Har uploaded design asset ko browser canvas ke through **PNG data URL** mein normalize karke `setDesign()` mein save karunga.
+- Isse preview aur PDF dono same, stable asset format use karenge.
+- SVG/WEBP/transparent PNG jaise cases bhi controlled ho jayenge.
 
-### 3. `templateToCustomElements()` mein signature element add karo har template ke liye
-File: `src/lib/template-to-custom.ts`
-- `vertical-classic` case mein: signature shape (right-bottom, ~20×6mm) + "Principal" text label below it, footer ke just upar.
-- `vertical-modern` case mein: same approach, niche center-right.
-- `horizontal-modern` case mein: bottom-right corner pe signature + label.
-- (`horizontal-classic` mein already hai, usko verify karunga.)
+Expected result:
+- Jo image preview mein dikhegi, wahi PDF ke liye bhi ek safe raster format mein available hogi.
 
-Isse jab user "Customize this template" press karega toh signature element bhi editable canvas pe aa jayega — drag/resize/delete kar sakega.
+### 2. PDF image helper ko robust banana
+File: `src/lib/cardDraw.ts`
 
-### 4. Custom editor mein "Principal name" text helper
-`CustomEditor.tsx` toolbar mein "Add → Principal" quick button — ek pre-filled text element insert kare jisme `design.principalName` value ho. Ye optional convenience hai agar user manually principal label chahiye.
+- `tryAddImage()` ko upgrade karunga taaki:
+  - actual mime type safely parse ho
+  - unsupported input ko fallback-converted PNG ke through handle kare
+  - wrong format guess ke saath `addImage()` call na ho
+- Small cache/helper add karunga taaki same logo/signature har card pe dubara expensive conversion na kare.
 
-### 5. PDF export mein verify karo
-`src/lib/cardDraw.ts` mein `vertical-classic`/`vertical-modern`/`horizontal-modern` ke draw functions mein bhi same signature drawing add karunga taaki preview aur PDF match kare. (Custom mode wala signature already supported hai PDF mein.)
+Expected result:
+- Logo/signature/custom background/custom signature elements sab PDF mein consistent render honge.
 
-### "Field add nahi ho rahi" — clarification
+### 3. Rotated export path ko stable banana
+Files:
+- `src/components/idcard/StepExport.tsx`
+- `src/lib/cardDraw.ts`
 
-Custom editor ka "+ Field" dropdown sirf woh fields show karta hai jo **Step 2 (Mapping)** mein CSV column ke saath map ki gayi hain. Agar wahaan koi field map nahi ki gayi, toh dropdown khaali ya short dikhega. Fix ke saath ek hint add karunga:
-- Agar `mappedFieldKeys.length === 0` ho, toh "+ Field" dropdown ke neeche chhoti note: *"No fields mapped yet — go to Step 2: Map columns to add fields."*
+Current issue ka strong suspect `withRotatedCard()` + image drawing combo hai.
 
-### Files touched
+Implementation:
+- Export rotation path ko safe banaunga so that images CTM/advanced transform ki wajah se vanish na hon.
+- Agar current matrix-based approach reliable na ho, rotated mode ke liye safer rendering path use karunga.
+- Immediate UX safety ke liye `autoRotate` ko default off karunga jab tak verified stable behavior confirm na ho.
 
-- `src/components/idcard/templates/VerticalClassic.tsx` — signature + principal label
-- `src/components/idcard/templates/VerticalModern.tsx` — same
-- `src/components/idcard/templates/HorizontalModern.tsx` — same
-- `src/lib/template-to-custom.ts` — signature element teeno templates ke liye
-- `src/lib/cardDraw.ts` — PDF mein signature draw karna teeno templates ke liye
-- `src/components/idcard/CustomEditor.tsx` — "Principal" quick-add button + empty-fields hint
+Expected result:
+- Non-rotated export first-time reliable rahe.
+- Rotated export bhi logo/signature missing ki problem ke bina chale.
 
+### 4. Built-in + custom dono modes cover karna
+Files affected by shared fix:
+- `src/lib/cardDraw.ts`
+- existing template exports indirectly
+
+Ye fix in sab pe lagega:
+- `vertical-classic`
+- `vertical-modern`
+- `horizontal-classic`
+- `horizontal-modern`
+- `custom`
+
+Kyuki sab PDF export ke waqt same image helper use karte hain.
+
+## QA plan
+
+Implementation ke baad in scenarios ko verify karunga:
+
+1. Vertical classic preview vs PDF
+2. Vertical modern preview vs PDF
+3. Custom mode preview vs PDF
+4. School logo present / absent
+5. Principal signature present / absent
+6. Auto-rotate off
+7. Auto-rotate on
+8. PNG/JPEG upload
+9. SVG/WEBP upload if available
+
+Success criteria:
+- Preview mein jo logo/signature visible hai, PDF mein bhi visible ho
+- Missing-image issue na aaye
+- Layout shift/corruption na ho
+- Auto-rotate on/off dono mein export usable rahe
+
+## Files to update
+
+- `src/components/idcard/StepDesign.tsx` — upload-time image normalization
+- `src/lib/cardDraw.ts` — safer PDF image pipeline + rotation-safe rendering
+- `src/components/idcard/StepExport.tsx` — safer export defaults / rotation handling
