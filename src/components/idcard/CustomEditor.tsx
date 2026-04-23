@@ -670,6 +670,25 @@ export default function CustomEditor() {
                 </>
               )}
 
+              {(selected.kind === "line" || selected.kind === "qr") && (
+                <div className="space-y-1.5">
+                  <Label className="text-xs">Color</Label>
+                  <div className="flex gap-2 items-center">
+                    <input
+                      type="color"
+                      value={selected.color}
+                      onChange={(e) => updateCustomElement(selected.id, { color: e.target.value })}
+                      className="h-8 w-12 rounded border cursor-pointer"
+                    />
+                    <Input
+                      value={selected.color}
+                      onChange={(e) => updateCustomElement(selected.id, { color: e.target.value })}
+                      className="font-mono text-xs"
+                    />
+                  </div>
+                </div>
+              )}
+
               {(selected.kind === "field" || selected.kind === "text" || selected.kind === "divider") && (
                 <>
                   <div className="space-y-1.5">
