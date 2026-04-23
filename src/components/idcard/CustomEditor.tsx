@@ -339,11 +339,29 @@ export default function CustomEditor() {
             style={{
               width: W,
               height: H,
-              backgroundImage: design.customBgDataUrl ? `url(${design.customBgDataUrl})` : undefined,
-              backgroundSize: "cover",
+              backgroundImage: design.customBgDataUrl
+                ? `url(${design.customBgDataUrl})`
+                : showGrid
+                ? `linear-gradient(to right, hsl(var(--muted-foreground) / 0.15) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--muted-foreground) / 0.15) 1px, transparent 1px)`
+                : undefined,
+              backgroundSize: design.customBgDataUrl ? "cover" : `${GRID_MM * PX_PER_MM}px ${GRID_MM * PX_PER_MM}px`,
               backgroundPosition: "center",
             }}
           >
+            {guides.v.map((x, i) => (
+              <div
+                key={`gv-${i}`}
+                className="absolute top-0 bottom-0 pointer-events-none"
+                style={{ left: x * PX_PER_MM, width: 1, background: "hsl(var(--primary))" }}
+              />
+            ))}
+            {guides.h.map((y, i) => (
+              <div
+                key={`gh-${i}`}
+                className="absolute left-0 right-0 pointer-events-none"
+                style={{ top: y * PX_PER_MM, height: 1, background: "hsl(var(--primary))" }}
+              />
+            ))}
             {design.customElements.map((el) => {
               const isSel = el.id === selectedId;
               return (
