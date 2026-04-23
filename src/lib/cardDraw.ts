@@ -3,6 +3,7 @@ import QRCode from "qrcode";
 import type { CardDesign, ColumnMapping, PhotoFile, Student, CustomElement, FieldKey } from "@/types/idcard";
 import { FIELD_LABELS } from "@/types/idcard";
 import { formatDate } from "@/lib/format-date";
+import { computeFieldsLayout } from "@/lib/auto-fit";
 
 const DATE_FIELDS = new Set<FieldKey>(["dob"]);
 
