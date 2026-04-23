@@ -424,6 +424,48 @@ export default function CustomEditor() {
                         Signature
                       </div>
                     )
+                  ) : el.kind === "line" ? (
+                    <div className="w-full h-full flex items-center justify-center pointer-events-none">
+                      <div
+                        style={
+                          el.h > el.w
+                            ? { width: Math.max(1, (el.thickness ?? 0.4) * PX_PER_MM), height: "100%", background: el.color }
+                            : { height: Math.max(1, (el.thickness ?? 0.4) * PX_PER_MM), width: "100%", background: el.color }
+                        }
+                      />
+                    </div>
+                  ) : el.kind === "rect" ? (
+                    <div
+                      className="w-full h-full pointer-events-none"
+                      style={{
+                        background: el.fillColor && el.fillColor !== "none" ? el.fillColor : "transparent",
+                        border:
+                          el.borderColor && el.borderColor !== "none"
+                            ? `${Math.max(1, (el.thickness ?? 0.3) * PX_PER_MM)}px solid ${el.borderColor}`
+                            : "none",
+                        borderRadius: (el.radius ?? 0) * PX_PER_MM,
+                      }}
+                    />
+                  ) : el.kind === "divider" ? (
+                    <div
+                      className="w-full h-full flex items-center pointer-events-none"
+                      style={{
+                        color: el.color,
+                        fontSize: el.fontSize * 1.2,
+                        fontFamily:
+                          el.fontFamily === "times" ? "Georgia, serif" : el.fontFamily === "courier" ? "monospace" : "Helvetica, Arial, sans-serif",
+                        fontWeight: el.bold ? 700 : 400,
+                        gap: 4,
+                      }}
+                    >
+                      <div style={{ flex: 1, height: Math.max(1, (el.thickness ?? 0.3) * PX_PER_MM), background: el.color }} />
+                      {el.text && <span className="px-1 whitespace-nowrap">{el.text}</span>}
+                      <div style={{ flex: 1, height: Math.max(1, (el.thickness ?? 0.3) * PX_PER_MM), background: el.color }} />
+                    </div>
+                  ) : el.kind === "qr" ? (
+                    <div className="w-full h-full bg-muted/30 flex items-center justify-center pointer-events-none text-[8px] text-muted-foreground border border-dashed">
+                      QR
+                    </div>
                   ) : (
                     <div
                       className="w-full h-full flex items-center px-1 pointer-events-none"
