@@ -60,6 +60,7 @@ export default function CustomEditor() {
 
   const sample = students[0];
   const samplePhoto = sample?.photoId ? photos.find((p) => p.id === sample.photoId) : photos[0];
+  const mappedFieldKeys = (Object.keys(FIELD_LABELS) as FieldKey[]).filter((f) => mapping[f]);
 
   const onBgUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -90,12 +91,12 @@ export default function CustomEditor() {
     }
     const cw = design.customWidth;
     const ch = design.customHeight;
-    const hasPhoto = mappedFieldKeys.includes("photo" as FieldKey);
+    const hasPhoto = photos.length > 0 || students.some((s) => s.photoId);
     const photoW = 24;
     const photoH = 28;
     // Stack fields on left, photo on top-right.
     const startX = 4;
-    const startY = hasPhoto ? Math.max(4, photoH + 8) : 8;
+    const startY = 4;
     const rowH = 6;
     const gap = 1;
     let y = startY;
@@ -384,7 +385,6 @@ export default function CustomEditor() {
   };
 
   const selected = design.customElements.find((e) => e.id === selectedId) || null;
-  const mappedFieldKeys = (Object.keys(FIELD_LABELS) as FieldKey[]).filter((f) => mapping[f]);
 
   return (
     <div className="space-y-4">
