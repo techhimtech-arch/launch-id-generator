@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Trash2, Image as ImageIcon, Type, User, Plus, AlignLeft, AlignCenter, AlignRight, Bold, Italic, X, Minus, Square, QrCode, SeparatorHorizontal, Eraser, Wand2, RotateCcw } from "lucide-react";
+import { Trash2, Image as ImageIcon, Type, User, Plus, AlignLeft, AlignCenter, AlignRight, Bold, Italic, X, Minus, Square, QrCode, SeparatorHorizontal, Eraser, Wand2, RotateCcw, Maximize2, Minimize2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DATE_FORMAT_OPTIONS, formatDate } from "@/lib/format-date";
 import { eraseRectsFromImage } from "@/lib/bg-eraser";
@@ -21,7 +21,8 @@ import { fitImageToCard } from "@/lib/bg-fit";
 import { toast } from "sonner";
 
 /** On-screen scale for the editor — larger than preview so dragging is precise. */
-const PX_PER_MM = 6;
+const PX_PER_MM_NORMAL = 6;
+const PX_PER_MM_FULL = 9;
 
 export default function CustomEditor() {
   const { design, setDesign, addCustomElement, updateCustomElement, removeCustomElement, students, photos, mapping } =
@@ -48,6 +49,18 @@ export default function CustomEditor() {
   const [eraseDraw, setEraseDraw] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
   const eraseStartRef = useRef<{ x: number; y: number } | null>(null);
   const originalBgRef = useRef<string | null>(null);
+  const [fullscreen, setFullscreen] = useState(false);
+  const PX_PER_MM = fullscreen ? PX_PER_MM_FULL : PX_PER_MM_NORMAL;
+
+  // Lock body scroll while fullscreen so the editor truly takes over the viewport
+  useEffect(() => {
+    if (!fullscreen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [fullscreen]);
 
   /** Snap threshold in mm. */
   const SNAP_MM = 1.2;
@@ -433,8 +446,8 @@ export default function CustomEditor() {
 
   const selected = design.customElements.find((e) => e.id === selectedId) || null;
 
-  return (
-    <div className="space-y-4">
+  const editorBody = (
+    <div className={cn("space-y-4", fullscreen && "h-full flex flex-col")}>
       {/* Card size + background */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 p-4 bg-muted/30 rounded-lg border">
         <div className="space-y-1.5">
@@ -600,6 +613,15 @@ export default function CustomEditor() {
           >
             Grid
           </Button>
+          <Button
+            size="sm"
+            variant={fullscreen ? "default" : "outline"}
+            onClick={() => setFullscreen((s) => !s)}
+            title={fullscreen ? "Exit fullscreen editor" : "Open editor in fullscreen for more space"}
+          >
+            {fullscreen ? <Minimize2 className="h-3.5 w-3.5" /> : <Maximize2 className="h-3.5 w-3.5" />}
+            {fullscreen ? "Exit" : "Fullscreen"}
+          </Button>
         </div>
       </div>
 
@@ -609,9 +631,9 @@ export default function CustomEditor() {
         </div>
       )}
 
-      <div className="grid lg:grid-cols-[1fr_280px] gap-4">
+      <div className={cn("grid gap-4", fullscreen ? "lg:grid-cols-[1fr_340px] flex-1 min-h-0" : "lg:grid-cols-[1fr_280px]")}>
         {/* Canvas */}
-        <div className="bg-muted/40 rounded-lg p-6 border overflow-auto flex items-start justify-center">
+        <div className={cn("bg-muted/40 rounded-lg p-6 border overflow-auto flex items-start justify-center", fullscreen && "lg:max-h-full")}>
           <div
             ref={canvasRef}
             onMouseDown={onCanvasMouseDown}
@@ -774,7 +796,7 @@ export default function CustomEditor() {
         </div>
 
         {/* Inspector */}
-        <div className="bg-card border rounded-lg p-4 space-y-3 h-fit">
+        <div className={cn("bg-card border rounded-lg p-4 space-y-3", fullscreen ? "lg:max-h-full lg:overflow-auto" : "h-fit")}>
           {!selected ? (
             <div className="text-xs text-muted-foreground">
               Click any element on the card to edit its style. Drag to move, drag corner to resize.
@@ -1067,4 +1089,15 @@ export default function CustomEditor() {
       </div>
     </div>
   );
+
+  if (fullscreen) {
+    return (
+      <div className="fixed inset-0 z-50 bg-background overflow-auto p-4 sm:p-6">
+        <div className="max-w-[1600px] mx-auto h-full">
+          {editorBody}
+        </div>
+      </div>
+    );
+  }
+  return editorBody;
 }
