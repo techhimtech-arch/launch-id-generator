@@ -613,6 +613,15 @@ export default function CustomEditor() {
           >
             Grid
           </Button>
+          <Button
+            size="sm"
+            variant={fullscreen ? "default" : "outline"}
+            onClick={() => setFullscreen((s) => !s)}
+            title={fullscreen ? "Exit fullscreen editor" : "Open editor in fullscreen for more space"}
+          >
+            {fullscreen ? <Minimize2 className="h-3.5 w-3.5" /> : <Maximize2 className="h-3.5 w-3.5" />}
+            {fullscreen ? "Exit" : "Fullscreen"}
+          </Button>
         </div>
       </div>
 
