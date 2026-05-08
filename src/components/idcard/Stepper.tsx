@@ -16,7 +16,8 @@ const STEPS = [
 ];
 
 export default function Stepper() {
-  const { step, setStep, rows, reset } = useIdStore();
+  const { step, setStep, rows, reset, headers, mapping, photos, students, design, hydrate } = useIdStore();
+  const fileRef = useRef<HTMLInputElement>(null);
   const [savedAt, setSavedAt] = useState<number | null>(null);
   const [storage, setStorage] = useState<{ usageMB: number; quotaMB: number } | null>(null);
 
