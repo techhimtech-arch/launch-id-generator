@@ -20,6 +20,7 @@ interface State {
   updatePhoto: (id: string, dataUrl: string) => void;
   buildStudents: () => void;
   assignPhoto: (studentId: string, photoId: string | null) => void;
+  updateRow: (rowIndex: number, row: Record<string, string>) => void;
   setDesign: (d: Partial<CardDesign>) => void;
   toggleField: (f: FieldKey) => void;
   addCustomElement: (el: CustomElement) => void;
