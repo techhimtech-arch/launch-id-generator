@@ -5,11 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Download, Loader2, FileJson, Upload } from "lucide-react";
+import { ArrowLeft, Download, Loader2, FileJson, Upload, Lock } from "lucide-react";
 import CardPreview from "./CardPreview";
 import { drawCard, drawCropMarks, drawCutGridLines, withRotatedCard, prewarmImageCache } from "@/lib/cardDraw";
 import { exportProject, importProject } from "@/lib/persistence";
 import { toast } from "@/hooks/use-toast";
+import { useSubscription } from "@/hooks/useSubscription";
+import { useAuth } from "@/hooks/useAuth";
+import { UpgradeModal } from "@/components/UpgradeModal";
 
 type PageSizeKey = "a4" | "a4-landscape" | "letter" | "a3";
 type CutStyle = "none" | "corners" | "grid";
@@ -33,6 +36,9 @@ export default function StepExport() {
   const { students, photos, mapping, design, setStep, headers, rows, step, hydrate } = useIdStore();
   const [busy, setBusy] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const { user } = useAuth();
+  const { isSubscribed } = useSubscription();
+  const [showUpgrade, setShowUpgrade] = useState(false);
 
   const [pageSize, setPageSize] = useState<PageSizeKey>("a4");
   const [margin, setMargin] = useState(5);
@@ -60,6 +66,10 @@ export default function StepExport() {
 
   const generatePdf = async () => {
     if (layout.total === 0) return;
+    if (!user || !isSubscribed) {
+      setShowUpgrade(true);
+      return;
+    }
     setBusy(true);
     try {
       // Pre-convert all design + photo images to PDF-safe PNGs once.
@@ -307,15 +317,24 @@ export default function StepExport() {
         </div>
       </div>
 
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center gap-3">
         <Button variant="outline" onClick={() => setStep(3)}>
           <ArrowLeft className="h-4 w-4" /> Back
         </Button>
-        <Button onClick={generatePdf} disabled={busy || layout.total === 0}>
-          {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-          Download PDF
-        </Button>
+        <div className="flex items-center gap-3">
+          {!isSubscribed && (
+            <span className="hidden sm:inline text-xs text-muted-foreground">
+              Pro required to download
+            </span>
+          )}
+          <Button onClick={generatePdf} disabled={busy || layout.total === 0}>
+            {busy ? <Loader2 className="h-4 w-4 animate-spin" /> :
+              isSubscribed ? <Download className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
+            {isSubscribed ? "Download PDF" : "Unlock to Download"}
+          </Button>
+        </div>
       </div>
+      <UpgradeModal open={showUpgrade} onOpenChange={setShowUpgrade} />
     </div>
   );
 }
