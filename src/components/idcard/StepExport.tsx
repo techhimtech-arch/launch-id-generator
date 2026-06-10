@@ -335,7 +335,6 @@ export default function StepExport() {
         </div>
       </div>
       <UpgradeModal open={showUpgrade} onOpenChange={setShowUpgrade} />
-      </div>
     </div>
   );
 }
