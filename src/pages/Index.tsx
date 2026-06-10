@@ -8,6 +8,7 @@ import StepDesign from "@/components/idcard/StepDesign";
 import StepExport from "@/components/idcard/StepExport";
 import { loadState } from "@/lib/persistence";
 import { toast } from "@/hooks/use-toast";
+import AppHeader from "@/components/AppHeader";
 
 const Index = () => {
   const step = useIdStore((s) => s.step);
@@ -37,17 +38,20 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen flex bg-background">
-      <Stepper />
-      <main className="flex-1 overflow-auto">
-        <div className="max-w-6xl mx-auto p-8">
-          {step === 0 && <StepUpload />}
-          {step === 1 && <StepMapping />}
-          {step === 2 && <StepReview />}
-          {step === 3 && <StepDesign />}
-          {step === 4 && <StepExport />}
-        </div>
-      </main>
+    <div className="min-h-screen flex flex-col bg-background">
+      <AppHeader />
+      <div className="flex flex-1 min-h-0">
+        <Stepper />
+        <main className="flex-1 overflow-auto">
+          <div className="max-w-6xl mx-auto p-8">
+            {step === 0 && <StepUpload />}
+            {step === 1 && <StepMapping />}
+            {step === 2 && <StepReview />}
+            {step === 3 && <StepDesign />}
+            {step === 4 && <StepExport />}
+          </div>
+        </main>
+      </div>
     </div>
   );
 };
