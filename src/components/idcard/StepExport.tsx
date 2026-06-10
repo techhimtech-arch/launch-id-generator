@@ -66,6 +66,10 @@ export default function StepExport() {
 
   const generatePdf = async () => {
     if (layout.total === 0) return;
+    if (!user || !isSubscribed) {
+      setShowUpgrade(true);
+      return;
+    }
     setBusy(true);
     try {
       // Pre-convert all design + photo images to PDF-safe PNGs once.
