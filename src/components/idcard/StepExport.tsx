@@ -5,11 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Download, Loader2, FileJson, Upload } from "lucide-react";
+import { ArrowLeft, Download, Loader2, FileJson, Upload, Lock } from "lucide-react";
 import CardPreview from "./CardPreview";
 import { drawCard, drawCropMarks, drawCutGridLines, withRotatedCard, prewarmImageCache } from "@/lib/cardDraw";
 import { exportProject, importProject } from "@/lib/persistence";
 import { toast } from "@/hooks/use-toast";
+import { useSubscription } from "@/hooks/useSubscription";
+import { useAuth } from "@/hooks/useAuth";
+import { UpgradeModal } from "@/components/UpgradeModal";
 
 type PageSizeKey = "a4" | "a4-landscape" | "letter" | "a3";
 type CutStyle = "none" | "corners" | "grid";
