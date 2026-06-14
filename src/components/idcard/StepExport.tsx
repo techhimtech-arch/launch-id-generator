@@ -40,6 +40,7 @@ export default function StepExport() {
   const { user } = useAuth();
   const { isSubscribed } = useSubscription();
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [usage, setUsage] = useState(getExportUsage());
 
   const [pageSize, setPageSize] = useState<PageSizeKey>("a4");
   const [margin, setMargin] = useState(5);
@@ -67,9 +68,13 @@ export default function StepExport() {
 
   const generatePdf = async () => {
     if (layout.total === 0) return;
-    if (!user || !isSubscribed) {
-      setShowUpgrade(true);
-      return;
+    const showWatermark = !isSubscribed;
+    if (showWatermark) {
+      const u = getExportUsage();
+      if (u.remaining <= 0) {
+        setShowUpgrade(true);
+        return;
+      }
     }
     setBusy(true);
     try {
@@ -93,6 +98,14 @@ export default function StepExport() {
       for (const s of students) {
         for (let k = 0; k < Math.max(1, duplicateN); k++) queue.push(s);
       }
+
+      const stampWatermark = (cx: number, cy: number, cw: number, ch: number) => {
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(4);
+        doc.setTextColor(140, 140, 140);
+        doc.text("Made with IDCardStudio.app", cx + cw / 2, cy + ch - 0.6, { align: "center" });
+        doc.setTextColor(0, 0, 0);
+      };
 
       for (let i = 0; i < queue.length; i++) {
         if (i > 0 && i % perPage === 0) {
@@ -120,10 +133,21 @@ export default function StepExport() {
         } else {
           drawCard({ doc, x, y, student: s, photo, mapping, design });
         }
+        if (showWatermark) stampWatermark(x, y, drawW, drawH);
         if (cutStyle === "corners") drawCropMarks(doc, x, y, drawW, drawH);
       }
 
       doc.save(`id-cards-${Date.now()}.pdf`);
+      if (showWatermark) {
+        const next = incrementExportUsage();
+        setUsage(next);
+        toast({
+          title: `Free download used (${next.used}/${FREE_LIMIT})`,
+          description: next.remaining > 0
+            ? `${next.remaining} free downloads left this month. Upgrade to Pro to remove the watermark.`
+            : "You've used all free downloads this month. Upgrade to Pro for unlimited, watermark-free exports.",
+        });
+      }
     } finally {
       setBusy(false);
     }
