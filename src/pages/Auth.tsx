@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
+import Seo from "@/components/Seo";
 
 export default function Auth() {
   const [params] = useSearchParams();
@@ -19,7 +20,7 @@ export default function Auth() {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (user) nav("/", { replace: true });
+    if (user) nav("/app", { replace: true });
   }, [user, nav]);
 
   const submit = async (e: React.FormEvent) => {
@@ -52,6 +53,12 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <Seo
+        title={mode === "signup" ? "Sign up — ID Card Studio" : "Log in — ID Card Studio"}
+        description="Access your ID Card Studio account to manage subscriptions and download cards."
+        path="/auth"
+        noindex
+      />
       <div className="w-full max-w-md rounded-lg border bg-card p-6 shadow-sm">
         <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">← Back</Link>
         <h1 className="mt-3 text-2xl font-semibold">{mode === "signup" ? "Create account" : "Welcome back"}</h1>

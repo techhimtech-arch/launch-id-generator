@@ -9,6 +9,7 @@ import StepExport from "@/components/idcard/StepExport";
 import { loadState } from "@/lib/persistence";
 import { toast } from "@/hooks/use-toast";
 import AppHeader from "@/components/AppHeader";
+import Seo from "@/components/Seo";
 
 const Index = () => {
   const step = useIdStore((s) => s.step);
@@ -39,6 +40,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <Seo
+        title="ID Card Studio App — Build & Download School ID Cards"
+        description="Upload Excel, match photos, pick a template, download a print-ready PDF of bulk ID cards."
+        path="/app"
+      />
       <AppHeader />
       <div className="flex flex-1 min-h-0">
         <Stepper />

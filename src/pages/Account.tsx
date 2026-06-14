@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import AppHeader from "@/components/AppHeader";
+import Seo from "@/components/Seo";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -19,6 +20,7 @@ export default function Account() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo title="Your Account — ID Card Studio" description="Manage your subscription and account details." path="/account" noindex />
       <AppHeader />
       <main className="max-w-2xl mx-auto px-4 py-10 space-y-6">
         <div>
