@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppHeader from "@/components/AppHeader";
+import Seo from "@/components/Seo";
 import { Button } from "@/components/ui/button";
 import { Check, Crown, Loader2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
@@ -89,8 +90,22 @@ export default function Pricing() {
     }
   };
 
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: "ID Card Studio Pro",
+    description: "Unlimited watermark-free ID card exports for schools.",
+    offers: { "@type": "Offer", price: "1499", priceCurrency: "INR", availability: "https://schema.org/InStock" },
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title="Pricing — ID Card Studio Pro at ₹1,499/year"
+        description="One simple yearly plan. Unlimited watermark-free PDF & PNG exports, all templates, priority support. Secure Razorpay checkout."
+        path="/pricing"
+        jsonLd={productJsonLd}
+      />
       <AppHeader />
       <main className="max-w-3xl mx-auto px-4 py-12 sm:py-16">
         <div className="text-center space-y-3">

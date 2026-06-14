@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
+import Seo from "@/components/Seo";
 
 export default function Auth() {
   const [params] = useSearchParams();
@@ -19,7 +20,7 @@ export default function Auth() {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (user) nav("/", { replace: true });
+    if (user) nav("/app", { replace: true });
   }, [user, nav]);
 
   const submit = async (e: React.FormEvent) => {
