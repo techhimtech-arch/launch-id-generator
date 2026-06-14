@@ -9,6 +9,7 @@ import StepExport from "@/components/idcard/StepExport";
 import { loadState } from "@/lib/persistence";
 import { toast } from "@/hooks/use-toast";
 import AppHeader from "@/components/AppHeader";
+import Seo from "@/components/Seo";
 
 const Index = () => {
   const step = useIdStore((s) => s.step);
