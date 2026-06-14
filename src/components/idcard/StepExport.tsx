@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Download, Loader2, FileJson, Upload, Lock } from "lucide-react";
+import { ArrowLeft, Download, Loader2, FileJson, Upload, Sparkles } from "lucide-react";
 import CardPreview from "./CardPreview";
 import { drawCard, drawCropMarks, drawCutGridLines, withRotatedCard, prewarmImageCache } from "@/lib/cardDraw";
 import { exportProject, importProject } from "@/lib/persistence";
@@ -13,6 +13,7 @@ import { toast } from "@/hooks/use-toast";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/hooks/useAuth";
 import { UpgradeModal } from "@/components/UpgradeModal";
+import { getExportUsage, incrementExportUsage, FREE_LIMIT } from "@/lib/export-trial";
 
 type PageSizeKey = "a4" | "a4-landscape" | "letter" | "a3";
 type CutStyle = "none" | "corners" | "grid";
@@ -39,6 +40,7 @@ export default function StepExport() {
   const { user } = useAuth();
   const { isSubscribed } = useSubscription();
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [usage, setUsage] = useState(getExportUsage());
 
   const [pageSize, setPageSize] = useState<PageSizeKey>("a4");
   const [margin, setMargin] = useState(5);
@@ -66,9 +68,13 @@ export default function StepExport() {
 
   const generatePdf = async () => {
     if (layout.total === 0) return;
-    if (!user || !isSubscribed) {
-      setShowUpgrade(true);
-      return;
+    const showWatermark = !isSubscribed;
+    if (showWatermark) {
+      const u = getExportUsage();
+      if (u.remaining <= 0) {
+        setShowUpgrade(true);
+        return;
+      }
     }
     setBusy(true);
     try {
@@ -92,6 +98,14 @@ export default function StepExport() {
       for (const s of students) {
         for (let k = 0; k < Math.max(1, duplicateN); k++) queue.push(s);
       }
+
+      const stampWatermark = (cx: number, cy: number, cw: number, ch: number) => {
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(4);
+        doc.setTextColor(140, 140, 140);
+        doc.text("Made with IDCardStudio.app", cx + cw / 2, cy + ch - 0.6, { align: "center" });
+        doc.setTextColor(0, 0, 0);
+      };
 
       for (let i = 0; i < queue.length; i++) {
         if (i > 0 && i % perPage === 0) {
@@ -119,10 +133,21 @@ export default function StepExport() {
         } else {
           drawCard({ doc, x, y, student: s, photo, mapping, design });
         }
+        if (showWatermark) stampWatermark(x, y, drawW, drawH);
         if (cutStyle === "corners") drawCropMarks(doc, x, y, drawW, drawH);
       }
 
       doc.save(`id-cards-${Date.now()}.pdf`);
+      if (showWatermark) {
+        const next = incrementExportUsage();
+        setUsage(next);
+        toast({
+          title: `Free download used (${next.used}/${FREE_LIMIT})`,
+          description: next.remaining > 0
+            ? `${next.remaining} free downloads left this month. Upgrade to Pro to remove the watermark.`
+            : "You've used all free downloads this month. Upgrade to Pro for unlimited, watermark-free exports.",
+        });
+      }
     } finally {
       setBusy(false);
     }
@@ -317,20 +342,52 @@ export default function StepExport() {
         </div>
       </div>
 
-      <div className="flex justify-between items-center gap-3">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <Button variant="outline" onClick={() => setStep(3)}>
           <ArrowLeft className="h-4 w-4" /> Back
         </Button>
         <div className="flex items-center gap-3">
           {!isSubscribed && (
-            <span className="hidden sm:inline text-xs text-muted-foreground">
-              Pro required to download
-            </span>
+            <div className="text-xs text-muted-foreground text-right">
+              {usage.remaining > 0 ? (
+                <>
+                  <span className="font-medium text-foreground">{usage.remaining}</span> of{" "}
+                  {FREE_LIMIT} free downloads left · watermarked
+                  <br />
+                  <button
+                    onClick={() => setShowUpgrade(true)}
+                    className="text-primary hover:underline font-medium"
+                  >
+                    Upgrade to remove watermark
+                  </button>
+                </>
+              ) : (
+                <>
+                  Free downloads used up for this month
+                  <br />
+                  <button
+                    onClick={() => setShowUpgrade(true)}
+                    className="text-primary hover:underline font-medium"
+                  >
+                    Upgrade to Pro for unlimited
+                  </button>
+                </>
+              )}
+            </div>
           )}
           <Button onClick={generatePdf} disabled={busy || layout.total === 0}>
-            {busy ? <Loader2 className="h-4 w-4 animate-spin" /> :
-              isSubscribed ? <Download className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
-            {isSubscribed ? "Download PDF" : "Unlock to Download"}
+            {busy ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : isSubscribed ? (
+              <Download className="h-4 w-4" />
+            ) : (
+              <Sparkles className="h-4 w-4" />
+            )}
+            {isSubscribed
+              ? "Download PDF"
+              : usage.remaining > 0
+              ? "Download free (with watermark)"
+              : "Upgrade to Download"}
           </Button>
         </div>
       </div>

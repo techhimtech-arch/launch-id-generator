@@ -1,61 +1,112 @@
-# ID Card Studio — Subscription Plan (₹1499/year)
 
-App ko ek SaaS bana denge. User free mein sab try kar sakta hai (CSV upload, mapping, preview), but **PDF/PNG export** pe paywall lagega. Ek hi plan: **₹1499/year**.
+# Phase 2 Plan — Paying Customers Jaldi Lana
 
-## 1. Backend setup (Lovable Cloud)
-- Lovable Cloud enable karenge (Postgres + Auth + Edge Functions).
-- Tables:
-  - `profiles` — auth.users se linked (name, email, created_at).
-  - `subscriptions` — user_id, status (`active`/`expired`/`cancelled`), started_at, expires_at, razorpay_payment_id, razorpay_order_id, amount.
-  - `user_roles` + `app_role` enum (`admin`, `user`) — manual admin overrides ke liye.
-- RLS: har user sirf apna data dekhe. `has_role()` security-definer function admin checks ke liye.
-- Helper SQL function `public.is_subscribed(uid uuid)` → boolean, checks active sub with `expires_at > now()`.
+Goal: Conversion badhao + naye users laao. Do parallel tracks: **(A) Revenue mechanics** jo existing visitors ko paying customer banayein, aur **(B) Marketing surface** jo naye visitors laaye.
 
-## 2. Authentication
-- Email + password signup/login (Lovable Cloud Auth).
-- Optional Google login baad mein add kar sakte hain.
-- Pages: `/login`, `/signup`, `/account` (sub status + logout).
-- `onAuthStateChange` listener `App.tsx` mein, protected route wrapper.
+---
 
-## 3. Paywall logic
-- Free (logged out ya non-subscriber):
-  - CSV upload, column mapping, photo upload, **live preview** — sab allowed.
-  - **Export buttons** (PDF, PNG, bulk download, print) — disabled, click pe "Upgrade to Pro" modal.
-- Subscriber:
-  - Sab unlocked, unlimited exports.
-- `useSubscription()` hook — current user ka status fetch karega, components consume karenge.
-- Export functions ke andar bhi server-side guard (edge function) — frontend bypass na ho.
+## Track A — Revenue Mechanics
 
-## 4. Payments — Razorpay
-- Razorpay account user khud banayega; hum 2 secrets store karenge: `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`.
-- Edge Functions:
-  - `create-razorpay-order` — auth required, ₹1499 ka order banata hai, returns order_id.
-  - `verify-razorpay-payment` — signature verify karta hai, `subscriptions` row insert/update karta hai `expires_at = now() + 1 year`.
-  - `razorpay-webhook` — `payment.captured` / `subscription.charged` events handle karega (backup verification + future auto-renewal).
-- Frontend: Razorpay Checkout script load, order_id pass, success pe verify endpoint call.
+### 1. Free Trial with Watermark (hard lock hatao)
+Abhi "Unlock to Download" hard wall hai → conversion kam hota hai. Instead:
+- **Logged-out / non-subscriber**: PDF/PNG export allow, lekin har card ke neeche subtle **"Made with IDCard Studio — idcardstudio.app"** watermark.
+- **First 3 exports/month free** (with watermark) → fir "Remove watermark, unlimited exports — ₹1499/year".
+- Trial counter `subscriptions` table mein nahi, naya `export_usage` table mein (user_id, month, count).
 
-## 5. UI changes
-- **Pricing page** (`/pricing`) — ek card: "Pro — ₹1499/year", features list, "Subscribe" CTA.
-- **Upgrade modal** — export click pe trigger, pricing summary + "Subscribe Now" button.
-- **Account page** — current plan, expiry date, "Renew" button (30 din pehle se dikhana).
-- **Header** — login/signup buttons ya user avatar dropdown.
-- **Badge** preview pe ek subtle "Pro" lock icon export buttons pe.
+### 2. School Plan (Enterprise tier)
+Single user → multi-user, bigger ticket size.
+- **Pro (Individual)** — ₹1499/year — 1 user, unlimited exports.
+- **School Plan** — ₹4999/year — up to 5 teacher accounts, shared student database, priority support.
+- `subscriptions.plan` already exists (`pro_yearly` / `school_yearly`), `seats` column add karenge + `school_id` linking.
+- Pricing page pe 2 cards side-by-side, "Most popular" badge School pe.
 
-## 6. Edge cases
-- Expired sub: read-only access bana rahe, export lock ho jaye, banner "Subscription expired — renew karein".
-- Refund/manual grant: admin user `user_roles` mein `admin` set karke kisi ko bhi sub extend kar sake (simple admin page).
-- Payment fail: clear error toast, retry option.
+### 3. Coupon Codes
+Festive offers, school-bulk discounts, influencer codes.
+- New table `coupons` (code, discount_pct ya flat_inr, max_uses, expires_at, applies_to_plan).
+- Pricing page pe "Have a coupon?" input, edge function `validate-coupon` → discounted Razorpay order.
+- Admin route `/admin/coupons` (sirf `admin` role) — create/list/disable.
 
-## 7. Rollout order
-1. Cloud enable + auth tables + RLS.
-2. Login/signup UI + protected routes.
-3. `subscriptions` table + `useSubscription` hook + paywall locks (test mode: hardcoded subscriber).
-4. Razorpay secrets + edge functions + checkout integration.
-5. Pricing page + upgrade modal + account page.
-6. Webhook + admin overrides.
-7. Test full flow (signup → try export → paywall → pay → export works).
+### 4. Referral System
+"Refer a school, get 3 months free both sides."
+- `profiles.referral_code` (auto-generated on signup, 6-char).
+- `referrals` table (referrer_id, referred_id, status, reward_granted_at).
+- Signup page accepts `?ref=ABC123`; jab referred user paid karta hai → dono ki sub mein +90 days extend (edge function).
+- Account page pe "Your referral link" + share buttons (WhatsApp/Email).
 
-## Technical notes
-- Razorpay one-time order har year manual renewal hoga (simpler). Auto-recurring chahiye to Razorpay Subscriptions API use karenge — extra setup, baad mein add kar sakte hain.
-- Pricing: ₹1499/year competitive hai schools ke liye, but agar bulk (1000+ cards/month) wale enterprise customers aate hain to ek "School plan" baad mein add karenge.
-- Sab existing local features (CSV, mapping, preview, edit modal) waise hi rahenge — sirf export pe gate.
+### 5. Expiry Reminders + Renewal
+Churn rokne ke liye.
+- Edge function `subscription-reminders` (cron via pg_cron) — 30/7/1 din pehle email bhejta hai.
+- Account page pe expiry se 30 din pehle prominent "Renew now — 20% off" banner (with auto-coupon).
+- Email via Resend (already integrate-able, naya secret `RESEND_API_KEY`).
+
+---
+
+## Track B — Marketing Surface
+
+### 6. Proper Landing Page (`/`)
+Abhi root pe seedha app khulta hai → SEO/marketing ke liye useless.
+- Naya marketing landing at `/` with: hero (headline + demo screenshot/video), features grid (CSV upload, 5 templates, bulk PDF, custom design, QR codes), social proof placeholders (testimonials, school logos), pricing summary, FAQ, footer.
+- App khud `/app` pe move ho jayega (existing flow waise hi).
+- "Try free — no signup needed" CTA → `/app` direct, signup sirf export ke time.
+
+### 7. Public Templates Showcase (`/templates`)
+SEO honeypot — log search karte hain "school ID card template India".
+- Static page with 10-15 template previews (vertical/horizontal/CBSE-style/preschool/college).
+- Har template ka own URL (`/templates/cbse-vertical-blue`) for long-tail SEO.
+- "Use this template" CTA → `/app` with that template pre-selected.
+
+### 8. SEO Foundations
+- Proper `<title>`, `<meta description>`, OG tags per route via `react-helmet-async`.
+- `sitemap.xml` (auto-gen script) + `robots.txt`.
+- JSON-LD: Organization on `/`, Product on `/pricing`, FAQPage on landing FAQ.
+- Run SEO scan baad mein.
+
+### 9. Demo Video / GIF
+Landing page hero mein — 30-second screencast: CSV upload → mapping → preview → export. Placeholder rakhenge, user khud record karega ya hum loom embed ka spot reserve karenge.
+
+### 10. Blog / Help Section (`/blog`)
+Organic traffic ke liye. Initial 3 articles:
+- "How to create school ID cards in bulk from Excel (2026 guide)"
+- "Best ID card size and format for Indian schools"
+- "Free vs paid ID card software: kya choose karein?"
+Markdown-based, simple list + detail routes. Indexable.
+
+---
+
+## Rollout Order (priority)
+
+**Sprint 1 — Revenue quick wins (max impact)**
+1. Free trial with watermark + export counter
+2. Coupon system + admin route
+3. Renewal reminders email
+
+**Sprint 2 — Marketing surface**
+4. Landing page at `/`, app moves to `/app`
+5. SEO meta tags + sitemap + robots
+6. Templates showcase page
+
+**Sprint 3 — Scale**
+7. School Plan (multi-seat)
+8. Referral system
+9. Blog with 3 seed articles
+10. SEO scan + iteration
+
+---
+
+## Technical Notes
+
+- **Watermark**: Add as PDF text layer in `StepExport.tsx` `generatePdf()` when `!isSubscribed`. Toggle by sub status.
+- **Export usage**: `public.export_usage(user_id, month_key, count)` — RLS user-own only. Increment in edge function on each export request (server-truth).
+- **Coupons**: Razorpay order amount calculated server-side after coupon validation — never trust client.
+- **Referral**: Reward applied via edge function on `payment.captured` webhook, idempotent.
+- **Resend**: New secret `RESEND_API_KEY`, edge function uses `npm:resend`.
+- **Landing route**: `/` becomes marketing, `/app` becomes the current Index.tsx. All existing local state/persistence unaffected.
+- **Templates showcase**: Static data, no DB needed initially.
+
+---
+
+## Out of Scope (later phases)
+- Student DB, QR attendance, WhatsApp send, AI bg remove, staff cards — these are **product depth** features, separate phase.
+- Auto-recurring Razorpay subscriptions — manual yearly renewal kaafi hai abhi.
+
+Approve karo to main Sprint 1 se start karunga.
