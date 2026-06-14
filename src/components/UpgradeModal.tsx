@@ -14,7 +14,7 @@ export function UpgradeModal({ open, onOpenChange }: { open: boolean; onOpenChan
           </div>
           <DialogTitle className="text-center text-xl">Upgrade to Pro</DialogTitle>
           <DialogDescription className="text-center">
-            Free preview is unlimited. To download or print ID cards, subscribe to Pro.
+            Remove the watermark and get unlimited downloads. Subscribe to Pro for just ₹1,499/year.
           </DialogDescription>
         </DialogHeader>
         <div className="rounded-lg border p-4 space-y-2 my-2">
@@ -23,7 +23,7 @@ export function UpgradeModal({ open, onOpenChange }: { open: boolean; onOpenChan
             <span className="text-2xl font-bold">₹1,499<span className="text-sm font-normal text-muted-foreground">/year</span></span>
           </div>
           <ul className="text-sm text-muted-foreground space-y-1.5 mt-3">
-            {["Unlimited PDF & PNG exports", "All design templates", "Bulk print sheet layouts", "Project backup & restore", "Priority email support"].map((f) => (
+            {["Unlimited watermark-free PDF & PNG exports", "All design templates", "Bulk print sheet layouts", "Project backup & restore", "Priority email support"].map((f) => (
               <li key={f} className="flex gap-2">
                 <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
                 <span>{f}</span>

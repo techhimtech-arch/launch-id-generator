@@ -342,20 +342,52 @@ export default function StepExport() {
         </div>
       </div>
 
-      <div className="flex justify-between items-center gap-3">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <Button variant="outline" onClick={() => setStep(3)}>
           <ArrowLeft className="h-4 w-4" /> Back
         </Button>
         <div className="flex items-center gap-3">
           {!isSubscribed && (
-            <span className="hidden sm:inline text-xs text-muted-foreground">
-              Pro required to download
-            </span>
+            <div className="text-xs text-muted-foreground text-right">
+              {usage.remaining > 0 ? (
+                <>
+                  <span className="font-medium text-foreground">{usage.remaining}</span> of{" "}
+                  {FREE_LIMIT} free downloads left · watermarked
+                  <br />
+                  <button
+                    onClick={() => setShowUpgrade(true)}
+                    className="text-primary hover:underline font-medium"
+                  >
+                    Upgrade to remove watermark
+                  </button>
+                </>
+              ) : (
+                <>
+                  Free downloads used up for this month
+                  <br />
+                  <button
+                    onClick={() => setShowUpgrade(true)}
+                    className="text-primary hover:underline font-medium"
+                  >
+                    Upgrade to Pro for unlimited
+                  </button>
+                </>
+              )}
+            </div>
           )}
           <Button onClick={generatePdf} disabled={busy || layout.total === 0}>
-            {busy ? <Loader2 className="h-4 w-4 animate-spin" /> :
-              isSubscribed ? <Download className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
-            {isSubscribed ? "Download PDF" : "Unlock to Download"}
+            {busy ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : isSubscribed ? (
+              <Download className="h-4 w-4" />
+            ) : (
+              <Sparkles className="h-4 w-4" />
+            )}
+            {isSubscribed
+              ? "Download PDF"
+              : usage.remaining > 0
+              ? "Download free (with watermark)"
+              : "Upgrade to Download"}
           </Button>
         </div>
       </div>
