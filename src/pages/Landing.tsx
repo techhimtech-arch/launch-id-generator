@@ -16,26 +16,33 @@ import MarketingHeader from "@/components/MarketingHeader";
 import Seo from "@/components/Seo";
 
 const features = [
-  { icon: FileSpreadsheet, title: "Excel / CSV upload", desc: "Drop your student list, we'll auto-detect Name, Roll No, Class — everything." },
-  { icon: ImageIcon, title: "Bulk photo matching", desc: "Upload all photos at once. Auto-match by file name, crop and remove background." },
+  { icon: FileSpreadsheet, title: "Excel / CSV upload", desc: "Drop any list — students, staff, members, event attendees. We auto-detect Name, ID, Class and more." },
+  { icon: ImageIcon, title: "Bulk photo matching", desc: "Upload all photos at once. Auto-match by file name, crop and remove background in one click." },
   { icon: LayoutTemplate, title: "5+ ready templates", desc: "Vertical, horizontal, classic, modern — or design fully custom with drag-and-drop." },
   { icon: Printer, title: "Print-ready sheets", desc: "A4 / Letter / A3 layouts with crop marks. 8–12 cards per page, no setup needed." },
-  { icon: QrCode, title: "QR codes built-in", desc: "Encode roll no, admission no or any field. Scan for attendance or verification." },
+  { icon: QrCode, title: "QR codes built-in", desc: "Encode roll no, employee ID, membership no or any field. Scan for attendance or verification." },
   { icon: ShieldCheck, title: "Privacy-first", desc: "Your data never leaves your browser. Works fully offline once loaded." },
 ];
 
+const audiences = [
+  { title: "Photographers", desc: "Deliver finished ID cards to schools and offices in hours, not days. Bill per card, keep the margin." },
+  { title: "Print shops", desc: "Take walk-in orders — pass a CSV in, hand a print-ready PDF to your printer. No design back-and-forth." },
+  { title: "Schools & colleges", desc: "Class teachers and admin staff can make a full batch of student cards without calling a designer." },
+  { title: "Offices & events", desc: "Staff cards, visitor passes, conference badges, gym memberships — same workflow, any use case." },
+];
+
 const steps = [
-  { n: "1", title: "Upload Excel + photos", desc: "Drag in your student list and a folder of photos. Done in 30 seconds." },
-  { n: "2", title: "Map columns & design", desc: "Pick a template, set school name and logo, choose what fields to show." },
+  { n: "1", title: "Upload Excel + photos", desc: "Drag in your list and a folder of photos. Done in 30 seconds." },
+  { n: "2", title: "Map columns & design", desc: "Pick a template, add logo and brand colors, choose what fields to show." },
   { n: "3", title: "Download & print", desc: "Get a single print-ready PDF with cards laid out per page. Take it to any printer." },
 ];
 
 const faqs = [
   { q: "Kya yeh free hai?", a: "Haan — 3 free downloads per month with a small watermark. Upgrade to Pro (₹899/year) for unlimited watermark-free downloads." },
-  { q: "Kitni cards ek baar mein bana sakte hain?", a: "Unlimited. We've tested with 1000+ student batches in a single PDF." },
+  { q: "Kitni cards ek baar mein bana sakte hain?", a: "Unlimited. We've tested with 1000+ entry batches in a single PDF." },
+  { q: "Main photographer / print shop hu, client ke liye bana sakta hu?", a: "Bilkul. Ek hi Pro account se aap multiple clients ke cards bana ke deliver kar sakte hain — koi per-card fee nahi." },
   { q: "Kya internet zaroori hai?", a: "Sirf pehli baar app load karne ke liye. Phir aap offline bhi pura kaam kar sakte hain — data aapke browser mein hi rehta hai." },
   { q: "Photo background remove kar sakte hain?", a: "Haan, built-in background eraser tool hai jo ek click mein clean white background bana deta hai." },
-  { q: "Schools ke liye bulk discount?", a: "Haan, contact karein. School plan jald hi launch ho raha hai with multi-teacher accounts." },
 ];
 
 export default function Landing() {
