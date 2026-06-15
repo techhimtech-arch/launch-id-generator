@@ -70,8 +70,8 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-background">
       <Seo
-        title="ID Card Studio — Bulk School ID Card Maker from Excel"
-        description="Create 1000+ student ID cards from an Excel sheet in minutes. 5 templates, QR codes, bulk photo upload, print-ready PDFs. Free to try."
+        title="ID Card Studio — Bulk ID Card Maker from Excel for Photographers, Print Shops & Schools"
+        description="Create 100s of ID cards from an Excel sheet in minutes. Built for photographers, print shops, schools, offices and event organisers. Print-ready PDFs, free to try."
         path="/"
         jsonLd={jsonLd}
       />
@@ -83,14 +83,14 @@ export default function Landing() {
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 pb-16 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border bg-card px-3 py-1 text-xs font-medium text-muted-foreground mb-6">
             <Sparkles className="h-3.5 w-3.5 text-primary" />
-            Trusted by schools across India
+            For photographers, print shops, schools & offices
           </div>
           <h1 className="text-4xl sm:text-6xl font-bold tracking-tight max-w-4xl mx-auto">
-            Bulk school ID cards from Excel, <span className="text-primary">in minutes.</span>
+            Bulk ID cards from Excel, <span className="text-primary">in minutes.</span>
           </h1>
           <p className="mt-5 text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
-            Upload your student list, match photos, pick a template, and download a print-ready PDF.
-            No design skills, no installation, no per-card pricing.
+            Upload any list — students, staff, members, event attendees — match photos, pick a template,
+            and download a print-ready PDF. No design skills, no installation, no per-card pricing.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Button asChild size="lg" className="text-base h-12 px-6">
