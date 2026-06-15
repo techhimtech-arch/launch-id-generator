@@ -57,7 +57,7 @@ Deno.serve(async (req) => {
             user_id: userId,
             status: "active",
             plan: "pro_yearly",
-            amount: payment.amount ?? 149900,
+            amount: payment.amount ?? 89900,
             currency: payment.currency ?? "INR",
             razorpay_order_id: orderId,
             razorpay_payment_id: paymentId,

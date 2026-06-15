@@ -31,7 +31,7 @@ const steps = [
 ];
 
 const faqs = [
-  { q: "Kya yeh free hai?", a: "Haan — 3 free downloads per month with a small watermark. Upgrade to Pro (₹1,499/year) for unlimited watermark-free downloads." },
+  { q: "Kya yeh free hai?", a: "Haan — 3 free downloads per month with a small watermark. Upgrade to Pro (₹899/year) for unlimited watermark-free downloads." },
   { q: "Kitni cards ek baar mein bana sakte hain?", a: "Unlimited. We've tested with 1000+ student batches in a single PDF." },
   { q: "Kya internet zaroori hai?", a: "Sirf pehli baar app load karne ke liye. Phir aap offline bhi pura kaam kar sakte hain — data aapke browser mein hi rehta hai." },
   { q: "Photo background remove kar sakte hain?", a: "Haan, built-in background eraser tool hai jo ek click mein clean white background bana deta hai." },
@@ -46,7 +46,7 @@ export default function Landing() {
       name: "ID Card Studio",
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
-      offers: { "@type": "Offer", price: "1499", priceCurrency: "INR" },
+      offers: { "@type": "Offer", price: "899", priceCurrency: "INR" },
       description: "Bulk school ID card maker from Excel. Print-ready PDFs in minutes.",
     },
     {
@@ -96,7 +96,7 @@ export default function Landing() {
             </Button>
           </div>
           <p className="mt-4 text-xs text-muted-foreground">
-            3 free downloads / month · ₹1,499/year for unlimited
+            3 free downloads / month · ₹899/year for unlimited
           </p>
 
           {/* Hero preview mock */}
@@ -190,7 +190,7 @@ export default function Landing() {
               <WandSparkles className="h-4 w-4" /> Pro
             </div>
             <div className="mt-2 text-3xl font-bold">
-              ₹1,499<span className="text-sm font-normal text-muted-foreground">/year</span>
+              ₹899<span className="text-sm font-normal text-muted-foreground">/year</span>
             </div>
             <ul className="mt-5 space-y-2 text-sm">
               <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" /> Unlimited downloads</li>
