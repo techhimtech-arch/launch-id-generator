@@ -133,12 +133,30 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Features */}
+      {/* Audiences */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Everything a school needs</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Built for anyone who prints ID cards</h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-            Designed with school admins and class teachers in mind. Fast, forgiving, and built to handle messy real-world data.
+            One tool, many use cases. If you have a list and photos, you're ready.
+          </p>
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {audiences.map((a) => (
+            <div key={a.title} className="rounded-xl border bg-card p-6">
+              <h3 className="font-semibold mb-1.5">{a.title}</h3>
+              <p className="text-sm text-muted-foreground">{a.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Features */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-16 sm:pb-24">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Everything you need to ship cards fast</h2>
+          <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
+            Fast, forgiving, and built to handle messy real-world data — typos, missing photos, weird column names.
           </p>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
