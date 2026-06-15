@@ -95,13 +95,13 @@ export default function Pricing() {
     "@type": "Product",
     name: "ID Card Studio Pro",
     description: "Unlimited watermark-free ID card exports for schools.",
-    offers: { "@type": "Offer", price: "1499", priceCurrency: "INR", availability: "https://schema.org/InStock" },
+    offers: { "@type": "Offer", price: "899", priceCurrency: "INR", availability: "https://schema.org/InStock" },
   };
 
   return (
     <div className="min-h-screen bg-background">
       <Seo
-        title="Pricing — ID Card Studio Pro at ₹1,499/year"
+        title="Pricing — ID Card Studio Pro at ₹899/year"
         description="One simple yearly plan. Unlimited watermark-free PDF & PNG exports, all templates, priority support. Secure Razorpay checkout."
         path="/pricing"
         jsonLd={productJsonLd}
@@ -133,7 +133,7 @@ export default function Pricing() {
             <div className="flex items-center gap-2 text-sm font-medium text-primary">
               <Crown className="h-4 w-4" /> Pro
             </div>
-            <div className="mt-2 text-3xl font-bold">₹1,499<span className="text-base font-normal text-muted-foreground">/year</span></div>
+            <div className="mt-2 text-3xl font-bold">₹899<span className="text-base font-normal text-muted-foreground">/year</span></div>
             <p className="text-xs text-muted-foreground mt-1">~₹125/month</p>
             <ul className="mt-5 space-y-2 text-sm">
               {features.map((f) => (
@@ -147,7 +147,7 @@ export default function Pricing() {
             ) : (
               <Button className="w-full mt-6" onClick={subscribe} disabled={busy}>
                 {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-                {user ? "Subscribe for ₹1,499/year" : "Sign up & Subscribe"}
+                {user ? "Subscribe for ₹899/year" : "Sign up & Subscribe"}
               </Button>
             )}
           </div>

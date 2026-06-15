@@ -14,13 +14,13 @@ export function UpgradeModal({ open, onOpenChange }: { open: boolean; onOpenChan
           </div>
           <DialogTitle className="text-center text-xl">Upgrade to Pro</DialogTitle>
           <DialogDescription className="text-center">
-            Remove the watermark and get unlimited downloads. Subscribe to Pro for just ₹1,499/year.
+            Remove the watermark and get unlimited downloads. Subscribe to Pro for just ₹899/year.
           </DialogDescription>
         </DialogHeader>
         <div className="rounded-lg border p-4 space-y-2 my-2">
           <div className="flex items-baseline justify-between">
             <span className="font-semibold">Pro — Yearly</span>
-            <span className="text-2xl font-bold">₹1,499<span className="text-sm font-normal text-muted-foreground">/year</span></span>
+            <span className="text-2xl font-bold">₹899<span className="text-sm font-normal text-muted-foreground">/year</span></span>
           </div>
           <ul className="text-sm text-muted-foreground space-y-1.5 mt-3">
             {["Unlimited watermark-free PDF & PNG exports", "All design templates", "Bulk print sheet layouts", "Project backup & restore", "Priority email support"].map((f) => (

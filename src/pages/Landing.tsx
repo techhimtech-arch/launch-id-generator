@@ -16,26 +16,33 @@ import MarketingHeader from "@/components/MarketingHeader";
 import Seo from "@/components/Seo";
 
 const features = [
-  { icon: FileSpreadsheet, title: "Excel / CSV upload", desc: "Drop your student list, we'll auto-detect Name, Roll No, Class — everything." },
-  { icon: ImageIcon, title: "Bulk photo matching", desc: "Upload all photos at once. Auto-match by file name, crop and remove background." },
+  { icon: FileSpreadsheet, title: "Excel / CSV upload", desc: "Drop any list — students, staff, members, event attendees. We auto-detect Name, ID, Class and more." },
+  { icon: ImageIcon, title: "Bulk photo matching", desc: "Upload all photos at once. Auto-match by file name, crop and remove background in one click." },
   { icon: LayoutTemplate, title: "5+ ready templates", desc: "Vertical, horizontal, classic, modern — or design fully custom with drag-and-drop." },
   { icon: Printer, title: "Print-ready sheets", desc: "A4 / Letter / A3 layouts with crop marks. 8–12 cards per page, no setup needed." },
-  { icon: QrCode, title: "QR codes built-in", desc: "Encode roll no, admission no or any field. Scan for attendance or verification." },
+  { icon: QrCode, title: "QR codes built-in", desc: "Encode roll no, employee ID, membership no or any field. Scan for attendance or verification." },
   { icon: ShieldCheck, title: "Privacy-first", desc: "Your data never leaves your browser. Works fully offline once loaded." },
 ];
 
+const audiences = [
+  { title: "Photographers", desc: "Deliver finished ID cards to schools and offices in hours, not days. Bill per card, keep the margin." },
+  { title: "Print shops", desc: "Take walk-in orders — pass a CSV in, hand a print-ready PDF to your printer. No design back-and-forth." },
+  { title: "Schools & colleges", desc: "Class teachers and admin staff can make a full batch of student cards without calling a designer." },
+  { title: "Offices & events", desc: "Staff cards, visitor passes, conference badges, gym memberships — same workflow, any use case." },
+];
+
 const steps = [
-  { n: "1", title: "Upload Excel + photos", desc: "Drag in your student list and a folder of photos. Done in 30 seconds." },
-  { n: "2", title: "Map columns & design", desc: "Pick a template, set school name and logo, choose what fields to show." },
+  { n: "1", title: "Upload Excel + photos", desc: "Drag in your list and a folder of photos. Done in 30 seconds." },
+  { n: "2", title: "Map columns & design", desc: "Pick a template, add logo and brand colors, choose what fields to show." },
   { n: "3", title: "Download & print", desc: "Get a single print-ready PDF with cards laid out per page. Take it to any printer." },
 ];
 
 const faqs = [
-  { q: "Kya yeh free hai?", a: "Haan — 3 free downloads per month with a small watermark. Upgrade to Pro (₹1,499/year) for unlimited watermark-free downloads." },
-  { q: "Kitni cards ek baar mein bana sakte hain?", a: "Unlimited. We've tested with 1000+ student batches in a single PDF." },
+  { q: "Kya yeh free hai?", a: "Haan — 3 free downloads per month with a small watermark. Upgrade to Pro (₹899/year) for unlimited watermark-free downloads." },
+  { q: "Kitni cards ek baar mein bana sakte hain?", a: "Unlimited. We've tested with 1000+ entry batches in a single PDF." },
+  { q: "Main photographer / print shop hu, client ke liye bana sakta hu?", a: "Bilkul. Ek hi Pro account se aap multiple clients ke cards bana ke deliver kar sakte hain — koi per-card fee nahi." },
   { q: "Kya internet zaroori hai?", a: "Sirf pehli baar app load karne ke liye. Phir aap offline bhi pura kaam kar sakte hain — data aapke browser mein hi rehta hai." },
   { q: "Photo background remove kar sakte hain?", a: "Haan, built-in background eraser tool hai jo ek click mein clean white background bana deta hai." },
-  { q: "Schools ke liye bulk discount?", a: "Haan, contact karein. School plan jald hi launch ho raha hai with multi-teacher accounts." },
 ];
 
 export default function Landing() {
@@ -46,7 +53,7 @@ export default function Landing() {
       name: "ID Card Studio",
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
-      offers: { "@type": "Offer", price: "1499", priceCurrency: "INR" },
+      offers: { "@type": "Offer", price: "899", priceCurrency: "INR" },
       description: "Bulk school ID card maker from Excel. Print-ready PDFs in minutes.",
     },
     {
@@ -63,8 +70,8 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-background">
       <Seo
-        title="ID Card Studio — Bulk School ID Card Maker from Excel"
-        description="Create 1000+ student ID cards from an Excel sheet in minutes. 5 templates, QR codes, bulk photo upload, print-ready PDFs. Free to try."
+        title="ID Card Studio — Bulk ID Card Maker from Excel for Photographers, Print Shops & Schools"
+        description="Create 100s of ID cards from an Excel sheet in minutes. Built for photographers, print shops, schools, offices and event organisers. Print-ready PDFs, free to try."
         path="/"
         jsonLd={jsonLd}
       />
@@ -76,14 +83,14 @@ export default function Landing() {
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 pb-16 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border bg-card px-3 py-1 text-xs font-medium text-muted-foreground mb-6">
             <Sparkles className="h-3.5 w-3.5 text-primary" />
-            Trusted by schools across India
+            For photographers, print shops, schools & offices
           </div>
           <h1 className="text-4xl sm:text-6xl font-bold tracking-tight max-w-4xl mx-auto">
-            Bulk school ID cards from Excel, <span className="text-primary">in minutes.</span>
+            Bulk ID cards from Excel, <span className="text-primary">in minutes.</span>
           </h1>
           <p className="mt-5 text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
-            Upload your student list, match photos, pick a template, and download a print-ready PDF.
-            No design skills, no installation, no per-card pricing.
+            Upload any list — students, staff, members, event attendees — match photos, pick a template,
+            and download a print-ready PDF. No design skills, no installation, no per-card pricing.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Button asChild size="lg" className="text-base h-12 px-6">
@@ -96,7 +103,7 @@ export default function Landing() {
             </Button>
           </div>
           <p className="mt-4 text-xs text-muted-foreground">
-            3 free downloads / month · ₹1,499/year for unlimited
+            3 free downloads / month · ₹899/year for unlimited
           </p>
 
           {/* Hero preview mock */}
@@ -126,12 +133,30 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Features */}
+      {/* Audiences */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Everything a school needs</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Built for anyone who prints ID cards</h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-            Designed with school admins and class teachers in mind. Fast, forgiving, and built to handle messy real-world data.
+            One tool, many use cases. If you have a list and photos, you're ready.
+          </p>
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {audiences.map((a) => (
+            <div key={a.title} className="rounded-xl border bg-card p-6">
+              <h3 className="font-semibold mb-1.5">{a.title}</h3>
+              <p className="text-sm text-muted-foreground">{a.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Features */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-16 sm:pb-24">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Everything you need to ship cards fast</h2>
+          <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
+            Fast, forgiving, and built to handle messy real-world data — typos, missing photos, weird column names.
           </p>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -190,7 +215,7 @@ export default function Landing() {
               <WandSparkles className="h-4 w-4" /> Pro
             </div>
             <div className="mt-2 text-3xl font-bold">
-              ₹1,499<span className="text-sm font-normal text-muted-foreground">/year</span>
+              ₹899<span className="text-sm font-normal text-muted-foreground">/year</span>
             </div>
             <ul className="mt-5 space-y-2 text-sm">
               <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" /> Unlimited downloads</li>
