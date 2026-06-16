@@ -52,6 +52,15 @@ export default function AppHeader() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-2"
+                onClick={async () => { await signOut(); nav("/"); }}
+              >
+                <LogOut className="h-4 w-4" />
+                <span className="hidden sm:inline">Sign out</span>
+              </Button>
             </>
           ) : (
             <>
