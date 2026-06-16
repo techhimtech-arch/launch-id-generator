@@ -23,6 +23,9 @@ export default function MarketingHeader() {
           <Link to="/pricing" className="text-muted-foreground hover:text-foreground px-2">
             Pricing
           </Link>
+          <Link to="/contact" className="hidden sm:inline text-muted-foreground hover:text-foreground px-2">
+            Contact
+          </Link>
           {user ? (
             <>
               {isSubscribed && (

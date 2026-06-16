@@ -13,6 +13,7 @@ import {
   WandSparkles,
 } from "lucide-react";
 import MarketingHeader from "@/components/MarketingHeader";
+import SiteFooter from "@/components/SiteFooter";
 import Seo from "@/components/Seo";
 
 const features = [
@@ -261,19 +262,7 @@ export default function Landing() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t bg-card">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-foreground">ID Card Studio</span>
-            <span>· Made in India</span>
-          </div>
-          <div className="flex items-center gap-5">
-            <Link to="/templates" className="hover:text-foreground">Templates</Link>
-            <Link to="/pricing" className="hover:text-foreground">Pricing</Link>
-            <Link to="/app" className="hover:text-foreground">Open app</Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
