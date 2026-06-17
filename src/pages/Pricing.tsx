@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom";
 import AppHeader from "@/components/AppHeader";
 import Seo from "@/components/Seo";
 import { Button } from "@/components/ui/button";
-import { Check, Crown, Loader2 } from "lucide-react";
+import { Check, Crown, Loader2, QrCode } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import { UpiPayModal } from "@/components/UpiPayModal";
 
 declare global {
   interface Window {
@@ -41,6 +42,7 @@ export default function Pricing() {
   const { isSubscribed, expiresAt, refresh } = useSubscription();
   const nav = useNavigate();
   const [busy, setBusy] = useState(false);
+  const [upiOpen, setUpiOpen] = useState(false);
 
   const subscribe = async () => {
     if (!user) {
@@ -145,18 +147,31 @@ export default function Pricing() {
                 ✓ Active — expires {expiresAt ? new Date(expiresAt).toLocaleDateString() : ""}
               </div>
             ) : (
-              <Button className="w-full mt-6" onClick={subscribe} disabled={busy}>
-                {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-                {user ? "Subscribe for ₹899/year" : "Sign up & Subscribe"}
-              </Button>
+              <div className="mt-6 space-y-2">
+                <Button className="w-full" onClick={subscribe} disabled={busy}>
+                  {busy ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+                  {user ? "Pay ₹899 with Razorpay" : "Sign up & Subscribe"}
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full gap-2"
+                  onClick={() => (user ? setUpiOpen(true) : nav("/auth?mode=signup"))}
+                >
+                  <QrCode className="h-4 w-4" /> Pay ₹899 via UPI / QR
+                </Button>
+                <p className="text-[11px] text-muted-foreground text-center pt-1">
+                  UPI payments are activated manually within a few hours.
+                </p>
+              </div>
             )}
           </div>
         </div>
 
         <p className="text-center text-xs text-muted-foreground mt-8">
-          Secure payments by Razorpay. Cards, UPI, NetBanking & wallets supported. GST invoice available on request.
+          Secure payments by Razorpay or direct UPI. Cards, UPI, NetBanking & wallets supported. GST invoice available on request.
         </p>
       </main>
+      <UpiPayModal open={upiOpen} onOpenChange={setUpiOpen} onSubmitted={refresh} />
     </div>
   );
 }
