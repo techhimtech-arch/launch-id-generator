@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom";
 import AppHeader from "@/components/AppHeader";
 import Seo from "@/components/Seo";
 import { Button } from "@/components/ui/button";
-import { Check, Crown, Loader2 } from "lucide-react";
+import { Check, Crown, Loader2, QrCode } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import { UpiPayModal } from "@/components/UpiPayModal";
 
 declare global {
   interface Window {
