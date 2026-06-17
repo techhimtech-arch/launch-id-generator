@@ -42,6 +42,7 @@ export default function Pricing() {
   const { isSubscribed, expiresAt, refresh } = useSubscription();
   const nav = useNavigate();
   const [busy, setBusy] = useState(false);
+  const [upiOpen, setUpiOpen] = useState(false);
 
   const subscribe = async () => {
     if (!user) {
