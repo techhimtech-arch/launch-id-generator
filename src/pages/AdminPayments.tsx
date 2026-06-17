@@ -81,7 +81,7 @@ export default function AdminPayments() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Seo title="Admin — Payment Requests" path="/admin/payments" />
+      <Seo title="Admin — Payment Requests" description="Review and approve UPI payment requests." path="/admin/payments" />
       <AppHeader />
       <main className="max-w-5xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
