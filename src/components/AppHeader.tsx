@@ -2,7 +2,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
-import { Crown, LogOut, User as UserIcon } from "lucide-react";
+import { Crown, LogOut, User as UserIcon, Shield } from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +18,13 @@ export default function AppHeader() {
   const { user, signOut } = useAuth();
   const { isSubscribed } = useSubscription();
   const nav = useNavigate();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (!user) { setIsAdmin(false); return; }
+    supabase.rpc("has_role", { _user_id: user.id, _role: "admin" })
+      .then(({ data }) => setIsAdmin(Boolean(data)));
+  }, [user]);
 
   return (
     <header className="border-b bg-card/50 backdrop-blur">
@@ -46,6 +55,11 @@ export default function AppHeader() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => nav("/account")}>Account</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => nav("/pricing")}>Subscription</DropdownMenuItem>
+                  {isAdmin && (
+                    <DropdownMenuItem onClick={() => nav("/admin/payments")}>
+                      <Shield className="h-4 w-4 mr-2" /> Admin · Payments
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={async () => { await signOut(); nav("/"); }}>
                     <LogOut className="h-4 w-4 mr-2" /> Sign out
