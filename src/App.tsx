@@ -16,6 +16,9 @@ import Privacy from "./pages/Privacy.tsx";
 import Terms from "./pages/Terms.tsx";
 import Refund from "./pages/Refund.tsx";
 import AdminPayments from "./pages/AdminPayments.tsx";
+import AdminContacts from "./pages/AdminContacts.tsx";
+import AdminUsers from "./pages/AdminUsers.tsx";
+import AdminSubscriptions from "./pages/AdminSubscriptions.tsx";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +41,9 @@ const App = () => (
             <Route path="/terms" element={<Terms />} />
             <Route path="/refund" element={<Refund />} />
             <Route path="/admin/payments" element={<AdminPayments />} />
+            <Route path="/admin/contacts" element={<AdminContacts />} />
+            <Route path="/admin/users" element={<AdminUsers />} />
+            <Route path="/admin/subscriptions" element={<AdminSubscriptions />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppHeader from "@/components/AppHeader";
 import Seo from "@/components/Seo";
+import AdminNav from "@/components/AdminNav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, ShieldAlert } from "lucide-react";
@@ -84,6 +85,7 @@ export default function AdminPayments() {
       <Seo title="Admin — Payment Requests" description="Review and approve UPI payment requests." path="/admin/payments" />
       <AppHeader />
       <main className="max-w-5xl mx-auto px-4 py-8">
+        <AdminNav />
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold">UPI Payment Requests</h1>
           <Button variant="outline" size="sm" onClick={load}>Refresh</Button>
