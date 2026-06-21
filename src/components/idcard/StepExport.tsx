@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Download, Loader2, FileJson, Upload, Sparkles } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { ArrowLeft, Download, Loader2, FileJson, Upload, Sparkles, Eye } from "lucide-react";
 import CardPreview from "./CardPreview";
 import { drawCard, drawCropMarks, drawCutGridLines, withRotatedCard, prewarmImageCache } from "@/lib/cardDraw";
 import { exportProject, importProject } from "@/lib/persistence";
@@ -36,9 +37,10 @@ function computeFit(pageW: number, pageH: number, cardW: number, cardH: number, 
 export default function StepExport() {
   const { students, photos, mapping, design, setStep, headers, rows, step, hydrate } = useIdStore();
   const [busy, setBusy] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const { user } = useAuth();
-  const { isSubscribed } = useSubscription();
+  const { isSubscribed, isOfflineLeaseValid } = useSubscription();
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [usage, setUsage] = useState(getExportUsage());
 
@@ -66,10 +68,20 @@ export default function StepExport() {
   const totalCards = students.length * Math.max(1, duplicateN);
   const totalPages = layout.total > 0 ? Math.ceil(totalCards / layout.total) : 0;
 
-  const generatePdf = async () => {
+  const generatePdf = async (previewOnly = false) => {
     if (layout.total === 0) return;
+    
+    if (!isOfflineLeaseValid && !previewOnly) {
+      toast({
+        title: "Connection required",
+        description: "Please connect to the internet once to verify your subscription.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     const showWatermark = !isSubscribed;
-    if (showWatermark) {
+    if (!previewOnly && showWatermark) {
       const u = getExportUsage();
       if (u.remaining <= 0) {
         setShowUpgrade(true);
@@ -78,7 +90,6 @@ export default function StepExport() {
     }
     setBusy(true);
     try {
-      // Pre-convert all design + photo images to PDF-safe PNGs once.
       await prewarmImageCache([
         design.logoDataUrl,
         design.signatureDataUrl,
@@ -93,10 +104,14 @@ export default function StepExport() {
       const offsetY = margin + (usableH - (rows * drawH + (rows - 1) * gap)) / 2;
       const perPage = cols * rows;
 
-      // Build the print queue (with optional duplicates)
       const queue: typeof students = [];
-      for (const s of students) {
-        for (let k = 0; k < Math.max(1, duplicateN); k++) queue.push(s);
+      const limit = previewOnly ? Math.min(perPage, students.length) : students.length;
+      for (let i = 0; i < limit; i++) {
+        for (let k = 0; k < Math.max(1, duplicateN); k++) {
+          queue.push(students[i]);
+          if (previewOnly && queue.length >= perPage) break;
+        }
+        if (previewOnly && queue.length >= perPage) break;
       }
 
       const stampWatermark = (cx: number, cy: number, cw: number, ch: number) => {
@@ -109,6 +124,7 @@ export default function StepExport() {
 
       for (let i = 0; i < queue.length; i++) {
         if (i > 0 && i % perPage === 0) {
+          if (previewOnly) break;
           doc.addPage(page.format, page.orientation);
           if (cutStyle === "grid") {
             drawCutGridLines(doc, offsetX, offsetY, gap, cols, rows, drawW, drawH, page.w, page.h);
@@ -137,16 +153,21 @@ export default function StepExport() {
         if (cutStyle === "corners") drawCropMarks(doc, x, y, drawW, drawH);
       }
 
-      doc.save(`id-cards-${Date.now()}.pdf`);
-      if (showWatermark) {
-        const next = incrementExportUsage();
-        setUsage(next);
-        toast({
-          title: `Free download used (${next.used}/${FREE_LIMIT})`,
-          description: next.remaining > 0
-            ? `${next.remaining} free downloads left this month. Upgrade to Pro to remove the watermark.`
-            : "You've used all free downloads this month. Upgrade to Pro for unlimited, watermark-free exports.",
-        });
+      if (previewOnly) {
+        const out = doc.output("bloburl");
+        setPreviewUrl(out);
+      } else {
+        doc.save(`id-cards-${Date.now()}.pdf`);
+        if (showWatermark) {
+          const next = incrementExportUsage();
+          setUsage(next);
+          toast({
+            title: `Free download used (${next.used}/${FREE_LIMIT})`,
+            description: next.remaining > 0
+              ? `${next.remaining} free downloads left this month. Upgrade to Pro to remove the watermark.`
+              : "You've used all free downloads this month. Upgrade to Pro for unlimited, watermark-free exports.",
+          });
+        }
       }
     } finally {
       setBusy(false);
@@ -275,9 +296,30 @@ export default function StepExport() {
               </div>
             )}
           </div>
-          <p className="text-center text-xs text-muted-foreground">
+            <p className="text-center text-xs text-muted-foreground">
             {layout.total} cards/page · {totalPages} pages · {totalCards} total
           </p>
+          <Dialog onOpenChange={(open) => !open && setPreviewUrl(null)}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm" className="w-full gap-2 mt-2" onClick={() => generatePdf(true)}>
+                <Eye className="h-4 w-4" /> Preview Full Page
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl h-[90vh] flex flex-col">
+              <DialogHeader>
+                <DialogTitle>PDF Page Preview</DialogTitle>
+              </DialogHeader>
+              <div className="flex-1 bg-muted rounded-md overflow-hidden relative">
+                {previewUrl ? (
+                  <iframe src={previewUrl} className="w-full h-full border-none" />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                  </div>
+                )}
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 

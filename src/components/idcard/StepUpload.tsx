@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import * as XLSX from "xlsx";
-import { FileSpreadsheet, ImageIcon, Upload, Trash2 } from "lucide-react";
+import { FileSpreadsheet, ImageIcon, Upload, Trash2, Download } from "lucide-react";
 import { useIdStore } from "@/lib/idcard-store";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
@@ -68,6 +68,18 @@ export default function StepUpload() {
 
   const canProceed = rows.length > 0;
 
+  const downloadSample = () => {
+    const headers = ["Name", "Roll No", "Admission No", "Class", "Section", "DOB", "Blood Group", "Father Name", "Address", "Mobile"];
+    const data = [
+      ["John Doe", "101", "ADM001", "10", "A", "15/05/2010", "O+", "Robert Doe", "123 Street, City", "9876543210"],
+      ["Jane Smith", "102", "ADM002", "10", "B", "20/11/2010", "A+", "William Smith", "456 Avenue, Town", "9123456789"],
+    ];
+    const ws = XLSX.utils.aoa_to_sheet([headers, ...data]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Students");
+    XLSX.writeFile(wb, "sample_students.xlsx");
+  };
+
   return (
     <div className="space-y-8">
       <div>
@@ -76,18 +88,23 @@ export default function StepUpload() {
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
-        <div
-          {...excelDz.getRootProps()}
-          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
-            excelDz.isDragActive ? "border-primary bg-accent" : "border-border hover:border-primary/50"
-          }`}
-        >
-          <input {...excelDz.getInputProps()} />
-          <FileSpreadsheet className="mx-auto h-10 w-10 text-muted-foreground" />
-          <p className="mt-3 font-medium">Excel / CSV file</p>
-          <p className="text-sm text-muted-foreground mt-1">
-            {rows.length ? `${rows.length} rows · ${headers.length} columns loaded` : "Drag & drop, or click to select"}
-          </p>
+        <div className="space-y-3">
+          <div
+            {...excelDz.getRootProps()}
+            className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
+              excelDz.isDragActive ? "border-primary bg-accent" : "border-border hover:border-primary/50"
+            }`}
+          >
+            <input {...excelDz.getInputProps()} />
+            <FileSpreadsheet className="mx-auto h-10 w-10 text-muted-foreground" />
+            <p className="mt-3 font-medium">Excel / CSV file</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              {rows.length ? `${rows.length} rows · ${headers.length} columns loaded` : "Drag & drop, or click to select"}
+            </p>
+          </div>
+          <Button variant="ghost" size="sm" className="w-full text-xs gap-2" onClick={(e) => { e.stopPropagation(); downloadSample(); }}>
+            <Download className="h-3 w-3" /> Download sample Excel
+          </Button>
         </div>
 
         <div

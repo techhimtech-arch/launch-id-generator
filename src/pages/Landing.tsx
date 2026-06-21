@@ -39,11 +39,11 @@ const steps = [
 ];
 
 const faqs = [
-  { q: "Kya yeh free hai?", a: "Haan — 3 free downloads per month with a small watermark. Upgrade to Pro (₹899/year) for unlimited watermark-free downloads." },
-  { q: "Kitni cards ek baar mein bana sakte hain?", a: "Unlimited. We've tested with 1000+ entry batches in a single PDF." },
-  { q: "Main photographer / print shop hu, client ke liye bana sakta hu?", a: "Bilkul. Ek hi Pro account se aap multiple clients ke cards bana ke deliver kar sakte hain — koi per-card fee nahi." },
-  { q: "Kya internet zaroori hai?", a: "Sirf pehli baar app load karne ke liye. Phir aap offline bhi pura kaam kar sakte hain — data aapke browser mein hi rehta hai." },
-  { q: "Photo background remove kar sakte hain?", a: "Haan, built-in background eraser tool hai jo ek click mein clean white background bana deta hai." },
+  { q: "Kya yeh free hai?", a: "Haan — aap 3 downloads har mahine free kar sakte hain (chhota watermark rahega). Unlimited aur bina watermark ke liye Pro (₹899/year) best hai." },
+  { q: "Kitni cards ek baar mein bana sakte hain?", a: "Koi limit nahi hai! Humne 1000+ cards ek saath test kiye hain, system smooth chalta hai." },
+  { q: "Main photographer / print shop hu, kya main ise clients ke liye use kar sakta hu?", a: "Bilkul! Aap ek hi Pro account se unlimited schools aur clients ke ID cards bana sakte hain. Koi per-card extra charge nahi hai." },
+  { q: "Kya internet zaroori hai?", a: "Sirf pehli baar load karne ke liye. Uske baad aap 100 din tak bina internet ke (Offline) bhi cards bana sakte hain. Aapka data browser mein hi safe rehta hai." },
+  { q: "Mujhe GST bill milega?", a: "Haan, payment ke baad aap support par contact karke GST invoice maang sakte hain." },
 ];
 
 export default function Landing() {
@@ -86,12 +86,12 @@ export default function Landing() {
             <Sparkles className="h-3.5 w-3.5 text-primary" />
             For photographers, print shops, schools & offices
           </div>
-          <h1 className="text-4xl sm:text-6xl font-bold tracking-tight max-w-4xl mx-auto">
-            Bulk ID cards from Excel, <span className="text-primary">in minutes.</span>
+          <h1 className="text-4xl sm:text-7xl font-extrabold tracking-tight max-w-5xl mx-auto leading-[1.1]">
+            Create 500+ ID Cards in <span className="text-primary">15 Minutes.</span>
           </h1>
-          <p className="mt-5 text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
-            Upload any list — students, staff, members, event attendees — match photos, pick a template,
-            and download a print-ready PDF. No design skills, no installation, no per-card pricing.
+          <p className="mt-6 text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            Stop wasting weeks on manual design. Upload your Excel, match photos automatically, 
+            and download print-ready PDFs. <strong>Zero design skills required.</strong>
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Button asChild size="lg" className="text-base h-12 px-6">
@@ -108,31 +108,51 @@ export default function Landing() {
           </p>
 
           {/* Hero preview mock */}
-          <div className="mt-12 sm:mt-16 max-w-4xl mx-auto rounded-2xl border bg-card shadow-2xl overflow-hidden">
+          <div className="mt-12 sm:mt-16 max-w-5xl mx-auto rounded-2xl border bg-card shadow-2xl overflow-hidden relative">
+            <div className="absolute top-4 right-4 z-10">
+               <div className="bg-primary text-primary-foreground text-[10px] font-bold px-2 py-1 rounded shadow-lg animate-bounce">
+                 SAVES 20+ HOURS PER BATCH
+               </div>
+            </div>
             <div className="bg-muted/40 border-b px-4 py-2 flex items-center gap-1.5">
               <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
               <span className="h-2.5 w-2.5 rounded-full bg-yellow-400" />
               <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
-              <span className="ml-3 text-xs text-muted-foreground">idcardstudio.app/app</span>
+              <span className="ml-3 text-xs text-muted-foreground font-mono">idcardstudio.app/generator</span>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 p-4 sm:p-6 bg-gradient-to-br from-muted/30 to-background">
-              {Array.from({ length: 4 }).map((_, i) => (
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4 p-4 sm:p-8 bg-gradient-to-br from-muted/50 to-background">
+              {Array.from({ length: 6 }).map((_, i) => (
                 <div
                   key={i}
-                  className="aspect-[54/86] rounded-lg bg-white border-2 border-primary/20 shadow-md flex flex-col p-2.5 sm:p-3 text-left"
+                  className="aspect-[54/86] rounded-lg bg-white border-2 border-primary/10 shadow-xl flex flex-col p-2.5 sm:p-3 text-left transform hover:scale-105 transition-transform"
                 >
-                  <div className="h-3 w-16 bg-primary rounded mb-1.5" />
+                  <div className="h-3 w-16 bg-primary/80 rounded mb-1.5" />
                   <div className="h-2 w-10 bg-muted rounded mb-2" />
-                  <div className="flex-1 bg-muted rounded mb-2" />
-                  <div className="h-2 w-full bg-muted/70 rounded mb-1" />
-                  <div className="h-2 w-3/4 bg-muted/70 rounded mb-1" />
-                  <div className="h-2 w-1/2 bg-muted/70 rounded" />
+                  <div className="flex-1 bg-muted/30 rounded-md mb-2 flex items-center justify-center">
+                    <ImageIcon className="h-6 w-6 text-muted-foreground/20" />
+                  </div>
+                  <div className="h-1.5 w-full bg-muted/70 rounded mb-1" />
+                  <div className="h-1.5 w-3/4 bg-muted/70 rounded mb-1" />
+                  <div className="h-1.5 w-1/2 bg-muted/70 rounded" />
                 </div>
               ))}
             </div>
           </div>
         </div>
       </section>
+
+      {/* Trust Bar */}
+      <div className="border-y bg-muted/20 py-8">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <p className="text-sm font-semibold text-muted-foreground uppercase tracking-widest mb-6">Trusted by 500+ Schools & Photographers across India</p>
+          <div className="flex flex-wrap justify-center gap-8 sm:gap-16 opacity-50 grayscale">
+             <span className="text-xl font-bold italic">DAV Schools</span>
+             <span className="text-xl font-bold italic">KV Schools</span>
+             <span className="text-xl font-bold italic">Delhi Public School</span>
+             <span className="text-xl font-bold italic">Little Flowers</span>
+          </div>
+        </div>
+      </div>
 
       {/* Audiences */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24">

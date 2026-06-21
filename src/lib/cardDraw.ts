@@ -279,7 +279,8 @@ function drawVerticalClassic({ doc, x, y, student, photo, mapping, design }: Dra
     doc.setTextColor(60);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(layout.labelSize);
-    doc.text(FIELD_LABELS[f].toUpperCase(), x + 3, fy);
+    const label = (useIdStore.getState().displayLabels[f] || FIELD_LABELS[f]).toUpperCase();
+    doc.text(label, x + 3, fy);
     doc.setTextColor(25);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(layout.fontSize);
@@ -292,7 +293,8 @@ function drawVerticalClassic({ doc, x, y, student, photo, mapping, design }: Dra
     doc.setFont("helvetica", "bold");
     doc.setTextColor(60);
     doc.setFontSize(layout.labelSize);
-    doc.text("ADDRESS", x + 3, fy);
+    const label = (useIdStore.getState().displayLabels["address"] || "ADDRESS").toUpperCase();
+    doc.text(label, x + 3, fy);
     doc.setTextColor(40);
     doc.setFontSize(layout.fontSize);
     safeText(doc, addr, x + 3, fy + layout.labelSize * 0.45, W - 6, {
@@ -492,7 +494,8 @@ function drawVerticalModern({ doc, x, y, student, photo, mapping, design }: Draw
     doc.setTextColor(60);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(layout.labelSize);
-    doc.text(FIELD_LABELS[f].toUpperCase(), x + 3, fy);
+    const label = (useIdStore.getState().displayLabels[f] || FIELD_LABELS[f]).toUpperCase();
+    doc.text(label, x + 3, fy);
     doc.setTextColor(30);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(layout.fontSize);

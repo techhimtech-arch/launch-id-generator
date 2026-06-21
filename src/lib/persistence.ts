@@ -8,6 +8,7 @@ export interface PersistedState {
   headers: string[];
   rows: Record<string, string>[];
   mapping: ColumnMapping;
+  displayLabels: Partial<Record<FieldKey, string>>;
   photos: PhotoFile[];
   students: Student[];
   design: CardDesign;

@@ -9,12 +9,14 @@ interface State {
   headers: string[];
   rows: Record<string, string>[];
   mapping: ColumnMapping;
+  displayLabels: Partial<Record<FieldKey, string>>;
   photos: PhotoFile[];
   students: Student[];
   design: CardDesign;
   setStep: (n: number) => void;
   setExcel: (headers: string[], rows: Record<string, string>[]) => void;
   setMapping: (m: ColumnMapping) => void;
+  setDisplayLabel: (f: FieldKey, label: string) => void;
   addPhotos: (p: PhotoFile[]) => void;
   removePhoto: (id: string) => void;
   updatePhoto: (id: string, dataUrl: string) => void;
@@ -54,12 +56,15 @@ export const useIdStore = create<State>((set, get) => ({
   headers: [],
   rows: [],
   mapping: {},
+  displayLabels: {},
   photos: [],
   students: [],
   design: defaultDesign,
   setStep: (n) => set({ step: n }),
-  setExcel: (headers, rows) => set({ headers, rows, mapping: {}, students: [] }),
+  setExcel: (headers, rows) => set({ headers, rows, mapping: {}, displayLabels: {}, students: [] }),
   setMapping: (mapping) => set({ mapping }),
+  setDisplayLabel: (f, label) =>
+    set({ displayLabels: { ...get().displayLabels, [f]: label } }),
   addPhotos: (p) => set({ photos: [...get().photos, ...p] }),
   removePhoto: (id) =>
     set({
@@ -131,6 +136,7 @@ export const useIdStore = create<State>((set, get) => ({
       headers: s.headers,
       rows: s.rows,
       mapping: s.mapping,
+      displayLabels: s.displayLabels || {},
       photos: s.photos,
       students: s.students,
       design: s.design,
@@ -164,6 +170,7 @@ useIdStore.subscribe((s) => {
       headers: s.headers,
       rows: s.rows,
       mapping: s.mapping,
+      displayLabels: s.displayLabels,
       photos: s.photos,
       students: s.students,
       design: s.design,
