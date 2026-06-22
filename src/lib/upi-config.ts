@@ -1,9 +1,9 @@
 // 🔧 EDIT THESE TO YOUR OWN UPI DETAILS
 // Aap apni UPI ID yaha update kariye. Yahi QR aur UPI deep-link mein use hogi.
 export const UPI_CONFIG = {
-  upiId: "yourname@okhdfc",        // <-- replace with your real UPI ID
-  payeeName: "ID Card Studio",     // shown in payee's UPI app
-  amount: 899,                      // INR
+  upiId: "ramanthakur13135@okicici",
+  payeeName: "Raman Thakur",
+  amount: 899,
   note: "ID Card Studio Pro",
 };
 
