@@ -1,5 +1,5 @@
 import { get, set, del } from "idb-keyval";
-import type { CardDesign, ColumnMapping, PhotoFile, Student } from "@/types/idcard";
+import type { CardDesign, ColumnMapping, FieldKey, PhotoFile, Student } from "@/types/idcard";
 
 const KEY = "idcard-studio:state:v1";
 
