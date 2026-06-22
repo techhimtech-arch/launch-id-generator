@@ -35,7 +35,7 @@ function computeFit(pageW: number, pageH: number, cardW: number, cardH: number, 
 }
 
 export default function StepExport() {
-  const { students, photos, mapping, design, setStep, headers, rows, step, hydrate } = useIdStore();
+  const { students, photos, mapping, design, setStep, headers, rows, step, hydrate, displayLabels } = useIdStore();
   const [busy, setBusy] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -155,7 +155,7 @@ export default function StepExport() {
 
       if (previewOnly) {
         const out = doc.output("bloburl");
-        setPreviewUrl(out);
+        setPreviewUrl(String(out));
       } else {
         doc.save(`id-cards-${Date.now()}.pdf`);
         if (showWatermark) {
@@ -355,7 +355,7 @@ export default function StepExport() {
             variant="outline"
             size="sm"
             onClick={() =>
-              exportProject({ step, headers, rows, mapping, photos, students, design })
+              exportProject({ step, headers, rows, mapping, displayLabels, photos, students, design })
             }
           >
             <FileJson className="h-4 w-4" /> Export project (.json)
@@ -417,7 +417,7 @@ export default function StepExport() {
               )}
             </div>
           )}
-          <Button onClick={generatePdf} disabled={busy || layout.total === 0}>
+          <Button onClick={() => generatePdf()} disabled={busy || layout.total === 0}>
             {busy ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : isSubscribed ? (
