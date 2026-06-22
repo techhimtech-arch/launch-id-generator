@@ -148,12 +148,7 @@ export default function Pricing() {
               </div>
             ) : (
               <div className="mt-6 space-y-2">
-                <Button className="w-full" onClick={subscribe} disabled={busy}>
-                  {busy ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-                  {user ? "Pay ₹899 with Razorpay" : "Sign up & Subscribe"}
-                </Button>
                 <Button
-                  variant="outline"
                   className="w-full gap-2"
                   onClick={() => (user ? setUpiOpen(true) : nav("/auth?mode=signup"))}
                 >
@@ -168,7 +163,7 @@ export default function Pricing() {
         </div>
 
         <p className="text-center text-xs text-muted-foreground mt-8">
-          Secure payments by Razorpay or direct UPI. Cards, UPI, NetBanking & wallets supported. GST invoice available on request.
+          Secure UPI payments. GST invoice available on request.
         </p>
       </main>
       <UpiPayModal open={upiOpen} onOpenChange={setUpiOpen} onSubmitted={refresh} />

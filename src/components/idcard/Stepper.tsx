@@ -16,7 +16,7 @@ const STEPS = [
 ];
 
 export default function Stepper() {
-  const { step, setStep, rows, reset, headers, mapping, photos, students, design, hydrate } = useIdStore();
+  const { step, setStep, rows, reset, headers, mapping, photos, students, design, hydrate, displayLabels } = useIdStore();
   const fileRef = useRef<HTMLInputElement>(null);
   const [savedAt, setSavedAt] = useState<number | null>(null);
   const [storage, setStorage] = useState<{ usageMB: number; quotaMB: number } | null>(null);
@@ -95,7 +95,7 @@ export default function Stepper() {
             size="sm"
             className="flex-1 px-2"
             disabled={rows.length === 0}
-            onClick={() => exportProject({ step, headers, rows, mapping, photos, students, design })}
+            onClick={() => exportProject({ step, headers, rows, mapping, displayLabels, photos, students, design })}
             title="Export project as .json backup"
           >
             <FileJson className="h-3.5 w-3.5" /> Backup
