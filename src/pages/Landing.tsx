@@ -6,6 +6,7 @@ import {
   FileSpreadsheet,
   ImageIcon,
   LayoutTemplate,
+  MessageCircle,
   Printer,
   QrCode,
   ShieldCheck,
@@ -94,18 +95,19 @@ export default function Landing() {
             and download print-ready PDFs. <strong>Zero design skills required.</strong>
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Button asChild size="lg" className="text-base h-12 px-6">
+            <Button asChild size="lg" className="text-base h-12 px-6 shadow-lg hover:shadow-xl transition-shadow">
               <Link to="/app">
-                Start free — no signup <ArrowRight className="h-4 w-4" />
+                Start free trial — no signup <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="text-base h-12 px-6">
               <Link to="/templates">Browse templates</Link>
             </Button>
           </div>
-          <p className="mt-4 text-xs text-muted-foreground">
-            3 free downloads / month · ₹899/year for unlimited
-          </p>
+          <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-green-500/10 text-green-600 border border-green-500/20 px-4 py-1.5 text-sm font-medium">
+            <CheckCircle2 className="h-4 w-4" />
+            3 free downloads / month · Upgrade to Pro ₹899/year for unlimited
+          </div>
 
           {/* Hero preview mock */}
           <div className="mt-12 sm:mt-16 max-w-5xl mx-auto rounded-2xl border bg-card shadow-2xl overflow-hidden relative">
@@ -272,13 +274,43 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Sticky mobile CTA bar */}
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur border-t px-4 py-3 flex items-center gap-2">
+        <Button asChild size="sm" className="flex-1 h-10 text-sm">
+          <Link to="/app">Start free trial <ArrowRight className="h-3.5 w-3.5" /></Link>
+        </Button>
+        <Button asChild size="sm" variant="outline" className="flex-1 h-10 text-sm gap-1.5">
+          <a href="https://wa.me/919816531995" target="_blank" rel="noopener noreferrer">
+            <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
+          </a>
+        </Button>
+      </div>
+
+      {/* WhatsApp floating button (desktop) */}
+      <a
+        href="https://wa.me/919816531995"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hidden sm:flex fixed bottom-6 right-6 z-50 h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all"
+        aria-label="Chat on WhatsApp"
+      >
+        <MessageCircle className="h-7 w-7" />
+      </a>
+
       {/* CTA */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-16 sm:py-24 text-center">
         <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Ready to skip the Word doc nightmare?</h2>
         <p className="mt-3 text-muted-foreground">Free to try. No signup. Your first cards are 5 minutes away.</p>
-        <Button asChild size="lg" className="mt-8 h-12 px-8 text-base">
-          <Link to="/app">Start making cards <ArrowRight className="h-4 w-4" /></Link>
-        </Button>
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Button asChild size="lg" className="h-12 px-8 text-base shadow-lg hover:shadow-xl transition-shadow">
+            <Link to="/app">Start free trial <ArrowRight className="h-4 w-4" /></Link>
+          </Button>
+          <Button asChild size="lg" variant="outline" className="h-12 px-8 text-base gap-2">
+            <a href="https://wa.me/919816531995" target="_blank" rel="noopener noreferrer">
+              <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
+            </a>
+          </Button>
+        </div>
       </section>
 
       {/* Footer */}
