@@ -6,6 +6,7 @@ import {
   FileSpreadsheet,
   ImageIcon,
   LayoutTemplate,
+  MessageCircle,
   Printer,
   QrCode,
   ShieldCheck,
