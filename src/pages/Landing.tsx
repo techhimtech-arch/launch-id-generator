@@ -95,18 +95,19 @@ export default function Landing() {
             and download print-ready PDFs. <strong>Zero design skills required.</strong>
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Button asChild size="lg" className="text-base h-12 px-6">
+            <Button asChild size="lg" className="text-base h-12 px-6 shadow-lg hover:shadow-xl transition-shadow">
               <Link to="/app">
-                Start free — no signup <ArrowRight className="h-4 w-4" />
+                Start free trial — no signup <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="text-base h-12 px-6">
               <Link to="/templates">Browse templates</Link>
             </Button>
           </div>
-          <p className="mt-4 text-xs text-muted-foreground">
-            3 free downloads / month · ₹899/year for unlimited
-          </p>
+          <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-green-500/10 text-green-600 border border-green-500/20 px-4 py-1.5 text-sm font-medium">
+            <CheckCircle2 className="h-4 w-4" />
+            3 free downloads / month · Upgrade to Pro ₹899/year for unlimited
+          </div>
 
           {/* Hero preview mock */}
           <div className="mt-12 sm:mt-16 max-w-5xl mx-auto rounded-2xl border bg-card shadow-2xl overflow-hidden relative">
