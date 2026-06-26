@@ -50,6 +50,7 @@ const Index = () => {
         <Stepper />
         <main className="flex-1 overflow-auto">
           <div className="max-w-6xl mx-auto p-8">
+            <h1 className="sr-only">ID Card Generator</h1>
             {step === 0 && <StepUpload />}
             {step === 1 && <StepMapping />}
             {step === 2 && <StepReview />}

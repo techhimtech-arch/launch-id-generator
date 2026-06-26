@@ -72,13 +72,14 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-background">
       <Seo
-        title="ID Card Studio — Bulk ID Card Maker from Excel for Photographers, Print Shops & Schools"
-        description="Create 100s of ID cards from an Excel sheet in minutes. Built for photographers, print shops, schools, offices and event organisers. Print-ready PDFs, free to try."
+        title="ID Card Studio — Bulk ID Card Maker from Excel"
+        description="Create 100s of ID cards from an Excel sheet in minutes. For photographers, print shops, schools and offices. Print-ready PDFs, free to try."
         path="/"
         jsonLd={jsonLd}
       />
       <MarketingHeader />
 
+      <main>
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background pointer-events-none" />
@@ -273,6 +274,8 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
+      </main>
 
       {/* Sticky mobile CTA bar */}
       <div className="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur border-t px-4 py-3 flex items-center gap-2">

@@ -128,11 +128,12 @@ export default function StepUpload() {
           <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-2">
             {photos.map((p) => (
               <div key={p.id} className="relative group aspect-square rounded-md overflow-hidden border bg-muted">
-                <img src={p.dataUrl} alt={p.name} className="w-full h-full object-cover" />
+                <img src={p.dataUrl} alt="Student photo preview" className="w-full h-full object-cover" />
                 <button
                   onClick={() => removePhoto(p.id)}
                   className="absolute top-1 right-1 p-1 rounded bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity"
-                  title="Remove"
+                  title="Remove photo"
+                  aria-label="Remove photo"
                 >
                   <Trash2 className="h-3 w-3" />
                 </button>
