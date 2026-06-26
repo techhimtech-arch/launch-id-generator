@@ -1,0 +1,18 @@
+# ID Card Studio
+
+> Bulk ID card maker for photographers, print shops, schools, offices and event organisers. Upload Excel + photos, pick a template, download print-ready PDFs in minutes.
+
+ID Card Studio turns an Excel sheet of people and a folder of photos into print-ready PDF sheets of ID cards. Built for anyone who prints ID cards in bulk — school photographers, neighbourhood print shops, school admin staff, HR teams, and event organisers. Free to try with 3 watermarked downloads per month; Pro is ₹899/year for unlimited watermark-free exports.
+
+## Pages
+
+- [Home](/): Product overview, audiences, features, how-it-works, pricing teaser and FAQ.
+- [Templates](/templates): Gallery of ready-to-use ID card templates (vertical, horizontal, classic, modern).
+- [Pricing](/pricing): Free vs Pro plans, launch offer, testimonials and refund policy.
+- [Contact](/contact): Support contact form and WhatsApp / phone support details.
+
+## Legal
+
+- [Privacy Policy](/privacy): How user data and uploaded files are handled.
+- [Terms of Service](/terms): Terms governing use of the app.
+- [Refund Policy](/refund): 7-day refund terms for Pro subscriptions.
