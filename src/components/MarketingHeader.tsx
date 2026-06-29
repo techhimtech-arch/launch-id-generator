@@ -3,20 +3,13 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { Crown, IdCard, Shield } from "lucide-react";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useAdminStatus } from "@/hooks/useAdminStatus";
 
 export default function MarketingHeader() {
   const { user } = useAuth();
   const { isSubscribed } = useSubscription();
   const nav = useNavigate();
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  useEffect(() => {
-    if (!user) { setIsAdmin(false); return; }
-    supabase.rpc("has_role", { _user_id: user.id, _role: "admin" })
-      .then(({ data }) => setIsAdmin(Boolean(data)));
-  }, [user]);
+  const { isAdmin } = useAdminStatus();
 
   return (
     <header className="sticky top-0 z-30 border-b bg-background/80 backdrop-blur">
@@ -36,7 +29,7 @@ export default function MarketingHeader() {
             Contact
           </Link>
           {isAdmin && (
-            <Button variant="outline" size="sm" className="gap-1.5" onClick={() => nav("/admin/payments")}>
+            <Button size="sm" className="gap-1.5" onClick={() => nav("/admin/payments")}>
               <Shield className="h-3.5 w-3.5" /> Admin
             </Button>
           )}
