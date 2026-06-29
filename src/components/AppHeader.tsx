@@ -36,6 +36,12 @@ export default function AppHeader() {
           <Link to="/pricing" className="text-sm text-muted-foreground hover:text-foreground px-2">
             Pricing
           </Link>
+          {isAdmin && (
+            <Button variant="outline" size="sm" className="gap-1.5" onClick={() => nav("/admin/payments")}>
+              <Shield className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Admin</span>
+            </Button>
+          )}
           {user ? (
             <>
               {isSubscribed && (
