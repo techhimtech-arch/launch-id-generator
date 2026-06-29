@@ -11,8 +11,13 @@ export function useAdminGuard() {
   useEffect(() => {
     if (authLoading) return;
     if (!user) { nav("/auth"); return; }
-    supabase.rpc("has_role", { _user_id: user.id, _role: "admin" })
-      .then(({ data }) => setIsAdmin(Boolean(data)));
+    supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id)
+      .eq("role", "admin")
+      .maybeSingle()
+      .then(({ data, error }) => setIsAdmin(!error && data?.role === "admin"));
   }, [user, authLoading, nav]);
 
   return { isAdmin, authLoading, user };

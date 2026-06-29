@@ -33,15 +33,27 @@ export function useSubscription() {
       return;
     }
     setLoading(true);
-    const { data } = await supabase
+    const [{ data }, { data: adminRole }] = await Promise.all([
+      supabase
       .from("subscriptions")
       .select("expires_at, status")
       .eq("user_id", user.id)
       .eq("status", "active")
       .order("expires_at", { ascending: false })
       .limit(1)
-      .maybeSingle();
-    if (data && new Date(data.expires_at) > new Date()) {
+      .maybeSingle(),
+      supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .eq("role", "admin")
+        .maybeSingle(),
+    ]);
+
+    if (adminRole?.role === "admin") {
+      setActive(true);
+      setExpiresAt(null);
+    } else if (data && new Date(data.expires_at) > new Date()) {
       setActive(true);
       setExpiresAt(data.expires_at);
       // Store lease for offline verification

@@ -3,8 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { Crown, LogOut, User as UserIcon, Shield } from "lucide-react";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useAdminStatus } from "@/hooks/useAdminStatus";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,13 +17,7 @@ export default function AppHeader() {
   const { user, signOut } = useAuth();
   const { isSubscribed } = useSubscription();
   const nav = useNavigate();
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  useEffect(() => {
-    if (!user) { setIsAdmin(false); return; }
-    supabase.rpc("has_role", { _user_id: user.id, _role: "admin" })
-      .then(({ data }) => setIsAdmin(Boolean(data)));
-  }, [user]);
+  const { isAdmin } = useAdminStatus();
 
   return (
     <header className="border-b bg-card/50 backdrop-blur">
@@ -37,9 +30,9 @@ export default function AppHeader() {
             Pricing
           </Link>
           {isAdmin && (
-            <Button variant="outline" size="sm" className="gap-1.5" onClick={() => nav("/admin/payments")}>
+            <Button variant="default" size="sm" className="gap-1.5" onClick={() => nav("/admin/payments")}>
               <Shield className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">Admin</span>
+              <span>Admin</span>
             </Button>
           )}
           {user ? (
