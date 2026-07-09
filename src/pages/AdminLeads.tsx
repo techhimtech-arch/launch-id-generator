@@ -21,7 +21,7 @@ type Lead = {
 };
 
 export default function AdminLeads() {
-  const { loading: guardLoading, isAdmin } = useAdminGuard();
+  const { authLoading, isAdmin } = useAdminGuard();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -51,7 +51,7 @@ export default function AdminLeads() {
       `Hi ${name}, ID Card Studio se — aapne sample maanga tha. Yeh raha link: https://idcardstudio.zinglabs.in/app`,
     )}`;
 
-  if (guardLoading) return <div className="p-8 text-center text-sm text-muted-foreground">Loading…</div>;
+  if (authLoading || isAdmin === null) return <div className="p-8 text-center text-sm text-muted-foreground">Loading…</div>;
   if (!isAdmin) return null;
 
   return (
