@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
   CheckCircle2,
   FileSpreadsheet,
+  Gift,
   ImageIcon,
   LayoutTemplate,
   MessageCircle,
@@ -16,6 +18,7 @@ import {
 import MarketingHeader from "@/components/MarketingHeader";
 import SiteFooter from "@/components/SiteFooter";
 import Seo from "@/components/Seo";
+import { LeadMagnetModal } from "@/components/LeadMagnetModal";
 
 const features = [
   { icon: FileSpreadsheet, title: "Excel / CSV upload", desc: "Drop any list — students, staff, members, event attendees. We auto-detect Name, ID, Class and more." },
@@ -48,6 +51,9 @@ const faqs = [
 ];
 
 export default function Landing() {
+  const [leadOpen, setLeadOpen] = useState(false);
+  const [leadSource, setLeadSource] = useState("landing_hero");
+  const openLead = (source: string) => { setLeadSource(source); setLeadOpen(true); };
   const jsonLd = [
     {
       "@context": "https://schema.org",
@@ -96,13 +102,13 @@ export default function Landing() {
             and download print-ready PDFs. <strong>Zero design skills required.</strong>
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Button asChild size="lg" className="text-base h-12 px-6 shadow-lg hover:shadow-xl transition-shadow">
-              <Link to="/app">
-                Start free trial — no signup <ArrowRight className="h-4 w-4" />
-              </Link>
+            <Button size="lg" className="text-base h-12 px-6 shadow-lg hover:shadow-xl transition-shadow gap-2" onClick={() => openLead("landing_hero")}>
+              <Gift className="h-4 w-4" /> Get free sample on WhatsApp
             </Button>
             <Button asChild size="lg" variant="outline" className="text-base h-12 px-6">
-              <Link to="/templates">Browse templates</Link>
+              <Link to="/app">
+                Try live now — no signup <ArrowRight className="h-4 w-4" />
+              </Link>
             </Button>
           </div>
           <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-green-500/10 text-green-600 border border-green-500/20 px-4 py-1.5 text-sm font-medium">
@@ -305,16 +311,16 @@ export default function Landing() {
         <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Ready to skip the Word doc nightmare?</h2>
         <p className="mt-3 text-muted-foreground">Free to try. No signup. Your first cards are 5 minutes away.</p>
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-          <Button asChild size="lg" className="h-12 px-8 text-base shadow-lg hover:shadow-xl transition-shadow">
-            <Link to="/app">Start free trial <ArrowRight className="h-4 w-4" /></Link>
+          <Button size="lg" className="h-12 px-8 text-base shadow-lg hover:shadow-xl transition-shadow gap-2" onClick={() => openLead("landing_bottom")}>
+            <Gift className="h-4 w-4" /> Get free sample on WhatsApp
           </Button>
           <Button asChild size="lg" variant="outline" className="h-12 px-8 text-base gap-2">
-            <a href="https://wa.me/919816531995" target="_blank" rel="noopener noreferrer">
-              <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
-            </a>
+            <Link to="/app"><ArrowRight className="h-4 w-4" /> Try live now</Link>
           </Button>
         </div>
       </section>
+
+      <LeadMagnetModal open={leadOpen} onOpenChange={setLeadOpen} source={leadSource} />
 
       {/* Footer */}
       <SiteFooter />
