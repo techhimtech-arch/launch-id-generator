@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
   CheckCircle2,
   FileSpreadsheet,
+  Gift,
   ImageIcon,
   LayoutTemplate,
   MessageCircle,
@@ -16,6 +18,7 @@ import {
 import MarketingHeader from "@/components/MarketingHeader";
 import SiteFooter from "@/components/SiteFooter";
 import Seo from "@/components/Seo";
+import { LeadMagnetModal } from "@/components/LeadMagnetModal";
 
 const features = [
   { icon: FileSpreadsheet, title: "Excel / CSV upload", desc: "Drop any list — students, staff, members, event attendees. We auto-detect Name, ID, Class and more." },
