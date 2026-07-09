@@ -102,13 +102,13 @@ export default function Landing() {
             and download print-ready PDFs. <strong>Zero design skills required.</strong>
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Button asChild size="lg" className="text-base h-12 px-6 shadow-lg hover:shadow-xl transition-shadow">
-              <Link to="/app">
-                Start free trial — no signup <ArrowRight className="h-4 w-4" />
-              </Link>
+            <Button size="lg" className="text-base h-12 px-6 shadow-lg hover:shadow-xl transition-shadow gap-2" onClick={() => openLead("landing_hero")}>
+              <Gift className="h-4 w-4" /> Get free sample on WhatsApp
             </Button>
             <Button asChild size="lg" variant="outline" className="text-base h-12 px-6">
-              <Link to="/templates">Browse templates</Link>
+              <Link to="/app">
+                Try live now — no signup <ArrowRight className="h-4 w-4" />
+              </Link>
             </Button>
           </div>
           <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-green-500/10 text-green-600 border border-green-500/20 px-4 py-1.5 text-sm font-medium">
