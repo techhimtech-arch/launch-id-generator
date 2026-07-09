@@ -51,6 +51,9 @@ const faqs = [
 ];
 
 export default function Landing() {
+  const [leadOpen, setLeadOpen] = useState(false);
+  const [leadSource, setLeadSource] = useState("landing_hero");
+  const openLead = (source: string) => { setLeadSource(source); setLeadOpen(true); };
   const jsonLd = [
     {
       "@context": "https://schema.org",
