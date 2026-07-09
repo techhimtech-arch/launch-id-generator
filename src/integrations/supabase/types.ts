@@ -47,6 +47,42 @@ export type Database = {
         }
         Relationships: []
       }
+      leads: {
+        Row: {
+          city: string | null
+          contacted: boolean
+          created_at: string
+          id: string
+          name: string
+          notes: string | null
+          source: string | null
+          use_case: string | null
+          whatsapp: string
+        }
+        Insert: {
+          city?: string | null
+          contacted?: boolean
+          created_at?: string
+          id?: string
+          name: string
+          notes?: string | null
+          source?: string | null
+          use_case?: string | null
+          whatsapp: string
+        }
+        Update: {
+          city?: string | null
+          contacted?: boolean
+          created_at?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          source?: string | null
+          use_case?: string | null
+          whatsapp?: string
+        }
+        Relationships: []
+      }
       payment_requests: {
         Row: {
           admin_note: string | null
