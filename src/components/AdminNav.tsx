@@ -1,8 +1,9 @@
 import { NavLink } from "react-router-dom";
-import { CreditCard, MessageSquare, Users, Crown } from "lucide-react";
+import { CreditCard, MessageSquare, Users, Crown, Gift } from "lucide-react";
 
 const links = [
   { to: "/admin/payments", label: "Payments", icon: CreditCard },
+  { to: "/admin/leads", label: "Leads", icon: Gift },
   { to: "/admin/contacts", label: "Contacts", icon: MessageSquare },
   { to: "/admin/users", label: "Users", icon: Users },
   { to: "/admin/subscriptions", label: "Subscriptions", icon: Crown },
