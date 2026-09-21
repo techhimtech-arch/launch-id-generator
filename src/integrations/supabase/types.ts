@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      analytics_events: {
+        Row: {
+          created_at: string
+          event_name: string
+          id: string
+          metadata: Json
+          path: string | null
+          session_id: string
+          source: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_name: string
+          id?: string
+          metadata?: Json
+          path?: string | null
+          session_id: string
+          source?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_name?: string
+          id?: string
+          metadata?: Json
+          path?: string | null
+          session_id?: string
+          source?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           created_at: string
@@ -134,6 +167,45 @@ export type Database = {
           upi_ref?: string
           user_email?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      payment_settings: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          id: boolean
+          payee_name: string
+          payment_note: string
+          payments_enabled: boolean
+          updated_at: string
+          updated_by: string | null
+          upi_id: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          id?: boolean
+          payee_name?: string
+          payment_note?: string
+          payments_enabled?: boolean
+          updated_at?: string
+          updated_by?: string | null
+          upi_id?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          id?: boolean
+          payee_name?: string
+          payment_note?: string
+          payments_enabled?: boolean
+          updated_at?: string
+          updated_by?: string | null
+          upi_id?: string
         }
         Relationships: []
       }
