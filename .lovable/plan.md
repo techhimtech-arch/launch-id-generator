@@ -1,112 +1,117 @@
+# Admin Payments, Customer Analytics, SEO + GEO Growth Plan
 
-# Phase 2 Plan — Paying Customers Jaldi Lana
+## Goal
+Make payments easy to control, show which visitors are becoming real prospects, and build search visibility for photographers, print shops, schools, offices, and event organizers.
 
-Goal: Conversion badhao + naye users laao. Do parallel tracks: **(A) Revenue mechanics** jo existing visitors ko paying customer banayein, aur **(B) Marketing surface** jo naye visitors laaye.
+## Current baseline
+- Admins already sign in with Google; their database role unlocks the protected admin area.
+- UPI details are currently fixed in the app code, so changing them requires a new release.
+- Leads, users, payment requests, and subscriptions are already stored, but there is no single conversion dashboard.
+- Last 30 days: 10 visitors, 12 pageviews, 1.2 pages per visit, and 79% bounce rate. Traffic volume is currently the main bottleneck.
+- India keyword evidence: “id card maker” has about 18,100 monthly searches (moderate difficulty); “school id card maker” has about 110 (low difficulty). Missing data for a phrase does not mean no demand.
+- Existing SEO review data is stale; Search Console connection is still recorded as incomplete.
 
----
+## Phase 1 — Admin-configurable UPI
+- Add a single secure payment-settings record for:
+  - UPI ID
+  - payee name
+  - yearly price
+  - payment note
+  - payments enabled/disabled
+  - last updated time and admin
+- Add **Admin → Payment Settings** with validation, save state, and a live QR preview.
+- Generate the QR automatically from the saved UPI details; no separate QR image upload is needed.
+- Update the customer payment modal to load these settings and show a safe unavailable message if payments are disabled.
+- Keep edits restricted to database-confirmed admins; authenticated customers can only read the public payment fields.
+- Use the saved amount when creating a payment request so the admin view and customer receipt stay consistent.
 
-## Track A — Revenue Mechanics
+## Phase 2 — Customer and conversion analytics
+Add **Admin → Overview** with two layers:
 
-### 1. Free Trial with Watermark (hard lock hatao)
-Abhi "Unlock to Download" hard wall hai → conversion kam hota hai. Instead:
-- **Logged-out / non-subscriber**: PDF/PNG export allow, lekin har card ke neeche subtle **"Made with IDCard Studio — idcardstudio.app"** watermark.
-- **First 3 exports/month free** (with watermark) → fir "Remove watermark, unlimited exports — ₹1499/year".
-- Trial counter `subscriptions` table mein nahi, naya `export_usage` table mein (user_id, month, count).
+### Business funnel
+- Visitors
+- “Try free” clicks
+- App starts
+- Google sign-ins
+- Free exports
+- WhatsApp/sample leads
+- Payment modal opens
+- Payment requests submitted
+- Approved subscriptions
+- Conversion rates between each stage
 
-### 2. School Plan (Enterprise tier)
-Single user → multi-user, bigger ticket size.
-- **Pro (Individual)** — ₹1499/year — 1 user, unlimited exports.
-- **School Plan** — ₹4999/year — up to 5 teacher accounts, shared student database, priority support.
-- `subscriptions.plan` already exists (`pro_yearly` / `school_yearly`), `seats` column add karenge + `school_id` linking.
-- Pricing page pe 2 cards side-by-side, "Most popular" badge School pe.
+### Actionable customer lists
+- New leads needing follow-up
+- Signed-in users who started but did not pay
+- Pending UPI verifications
+- Active and expiring subscriptions
+- Source and campaign labels where available
 
-### 3. Coupon Codes
-Festive offers, school-bulk discounts, influencer codes.
-- New table `coupons` (code, discount_pct ya flat_inr, max_uses, expires_at, applies_to_plan).
-- Pricing page pe "Have a coupon?" input, edge function `validate-coupon` → discounted Razorpay order.
-- Admin route `/admin/coupons` (sirf `admin` role) — create/list/disable.
+Track only product events and anonymous session identifiers. A person becomes identifiable only after Google sign-in or a voluntarily submitted lead form. Add date filters and simple 7-day/30-day summaries; do not expose sensitive user data publicly.
 
-### 4. Referral System
-"Refer a school, get 3 months free both sides."
-- `profiles.referral_code` (auto-generated on signup, 6-char).
-- `referrals` table (referrer_id, referred_id, status, reward_granted_at).
-- Signup page accepts `?ref=ABC123`; jab referred user paid karta hai → dono ki sub mein +90 days extend (edge function).
-- Account page pe "Your referral link" + share buttons (WhatsApp/Email).
+## Phase 3 — SEO pages that match buying intent
+Keep the homepage focused on **ID card maker** and add focused pages without duplicating it:
 
-### 5. Expiry Reminders + Renewal
-Churn rokne ke liye.
-- Edge function `subscription-reminders` (cron via pg_cron) — 30/7/1 din pehle email bhejta hai.
-- Account page pe expiry se 30 din pehle prominent "Renew now — 20% off" banner (with auto-coupon).
-- Email via Resend (already integrate-able, naya secret `RESEND_API_KEY`).
+1. `/id-card-maker-for-photographers`
+2. `/id-card-software-for-print-shops`
+3. `/school-id-card-maker`
+4. `/bulk-id-card-maker-from-excel`
+5. `/employee-id-card-maker`
+6. `/event-badge-maker`
 
----
+Each page will include a real workflow, relevant templates, clear limitations, pricing, FAQs, and direct links into the tool. Avoid unsupported “trusted by” logos, fake testimonials, or invented usage numbers; replace them with verified proof as it becomes available.
 
-## Track B — Marketing Surface
+## Phase 4 — Helpful guides for SEO and GEO
+Create answer-first, citation-friendly guides that AI search tools can quote:
 
-### 6. Proper Landing Page (`/`)
-Abhi root pe seedha app khulta hai → SEO/marketing ke liye useless.
-- Naya marketing landing at `/` with: hero (headline + demo screenshot/video), features grid (CSV upload, 5 templates, bulk PDF, custom design, QR codes), social proof placeholders (testimonials, school logos), pricing summary, FAQ, footer.
-- App khud `/app` pe move ho jayega (existing flow waise hi).
-- "Try free — no signup needed" CTA → `/app` direct, signup sirf export ke time.
+- How to make ID cards in bulk from Excel
+- Student ID card size, fields, and print checklist for India
+- How photographers can price bulk ID card jobs
+- PVC vs paper ID cards: sizes, bleed, DPI, and print setup
+- How to match hundreds of student photos with Excel names
+- ID card maker vs Canva vs Word for bulk work
+- QR code ID cards: practical uses and privacy considerations
 
-### 7. Public Templates Showcase (`/templates`)
-SEO honeypot — log search karte hain "school ID card template India".
-- Static page with 10-15 template previews (vertical/horizontal/CBSE-style/preschool/college).
-- Har template ka own URL (`/templates/cbse-vertical-blue`) for long-tail SEO.
-- "Use this template" CTA → `/app` with that template pre-selected.
+Every guide will have:
+- A direct answer near the top
+- Step-by-step instructions using the actual app
+- Original screenshots and downloadable sample files
+- Comparison tables and concise FAQs
+- Author/business identity, reviewed/updated date, and cited sources for factual claims
+- Links to the matching tool workflow, template, and pricing page
 
-### 8. SEO Foundations
-- Proper `<title>`, `<meta description>`, OG tags per route via `react-helmet-async`.
-- `sitemap.xml` (auto-gen script) + `robots.txt`.
-- JSON-LD: Organization on `/`, Product on `/pricing`, FAQPage on landing FAQ.
-- Run SEO scan baad mein.
+## Phase 5 — Technical discoverability
+- Add all new public pages to the existing sitemap generator and keep admin/account/auth pages excluded.
+- Give every page a unique title, description, canonical URL, social metadata, and appropriate structured data.
+- Strengthen `llms.txt` with the new canonical guides and product facts.
+- Connect and verify Google Search Console, submit the sitemap once, then monitor queries, impressions, indexing, and page performance.
+- Keep pages fast and mobile-friendly; no doorway pages or mass-generated thin content.
 
-### 9. Demo Video / GIF
-Landing page hero mein — 30-second screencast: CSV upload → mapping → preview → export. Placeholder rakhenge, user khud record karega ya hum loom embed ka spot reserve karenge.
+## Phase 6 — Distribution and conversion loop
+SEO alone will be slow at the current traffic level, so publish and distribute each useful guide through:
+- Short Hindi walkthrough videos on YouTube
+- Photographer and print-shop WhatsApp/Facebook communities
+- Google Business Profile posts and partner links from local printers
+- Sample Excel/template downloads that feed the existing WhatsApp lead flow
+- Campaign-tagged links so the admin dashboard shows what produces leads and purchases
 
-### 10. Blog / Help Section (`/blog`)
-Organic traffic ke liye. Initial 3 articles:
-- "How to create school ID cards in bulk from Excel (2026 guide)"
-- "Best ID card size and format for Indian schools"
-- "Free vs paid ID card software: kya choose karein?"
-Markdown-based, simple list + detail routes. Indexable.
+## Delivery order
+1. Admin UPI settings and generated QR
+2. Admin overview and conversion event tracking
+3. Three highest-intent pages: photographers, print shops, and Excel bulk maker
+4. Two high-value guides with real screenshots/sample files
+5. Sitemap, metadata, internal links, and Search Console verification
+6. Review data after 30 days; expand only the pages earning impressions or leads
 
----
+## Success measures
+- 100+ qualified visitors/month first, then 500+
+- Bounce rate below 60%
+- At least 8–12% of landing visitors start the tool or request a sample
+- At least 3–5% leave an identifiable lead
+- Measure payment-request and approval conversion separately
 
-## Rollout Order (priority)
-
-**Sprint 1 — Revenue quick wins (max impact)**
-1. Free trial with watermark + export counter
-2. Coupon system + admin route
-3. Renewal reminders email
-
-**Sprint 2 — Marketing surface**
-4. Landing page at `/`, app moves to `/app`
-5. SEO meta tags + sitemap + robots
-6. Templates showcase page
-
-**Sprint 3 — Scale**
-7. School Plan (multi-seat)
-8. Referral system
-9. Blog with 3 seed articles
-10. SEO scan + iteration
-
----
-
-## Technical Notes
-
-- **Watermark**: Add as PDF text layer in `StepExport.tsx` `generatePdf()` when `!isSubscribed`. Toggle by sub status.
-- **Export usage**: `public.export_usage(user_id, month_key, count)` — RLS user-own only. Increment in edge function on each export request (server-truth).
-- **Coupons**: Razorpay order amount calculated server-side after coupon validation — never trust client.
-- **Referral**: Reward applied via edge function on `payment.captured` webhook, idempotent.
-- **Resend**: New secret `RESEND_API_KEY`, edge function uses `npm:resend`.
-- **Landing route**: `/` becomes marketing, `/app` becomes the current Index.tsx. All existing local state/persistence unaffected.
-- **Templates showcase**: Static data, no DB needed initially.
-
----
-
-## Out of Scope (later phases)
-- Student DB, QR attendance, WhatsApp send, AI bg remove, staff cards — these are **product depth** features, separate phase.
-- Auto-recurring Razorpay subscriptions — manual yearly renewal kaafi hai abhi.
-
-Approve karo to main Sprint 1 se start karunga.
+## Technical notes
+- Add a protected settings table with explicit grants, row-level security, and admin-only updates.
+- Add a constrained analytics-events table with an allowlist of event names and admin-only reads.
+- Reuse the existing Google auth, roles, leads, payment requests, and subscriptions instead of creating parallel systems.
+- Keep the current manual UPI approval flow; Razorpay can remain optional.
