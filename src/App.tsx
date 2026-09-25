@@ -20,6 +20,9 @@ import AdminContacts from "./pages/AdminContacts.tsx";
 import AdminUsers from "./pages/AdminUsers.tsx";
 import AdminSubscriptions from "./pages/AdminSubscriptions.tsx";
 import AdminLeads from "./pages/AdminLeads.tsx";
+import AdminOverview from "./pages/AdminOverview.tsx";
+import AdminPaymentSettings from "./pages/AdminPaymentSettings.tsx";
+import SolutionPage from "./pages/SolutionPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -41,7 +44,12 @@ const App = () => (
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/refund" element={<Refund />} />
+            <Route path="/id-card-maker-for-photographers" element={<SolutionPage kind="photographers" />} />
+            <Route path="/id-card-software-for-print-shops" element={<SolutionPage kind="print-shops" />} />
+            <Route path="/bulk-id-card-maker-from-excel" element={<SolutionPage kind="excel" />} />
+            <Route path="/admin" element={<AdminOverview />} />
             <Route path="/admin/payments" element={<AdminPayments />} />
+            <Route path="/admin/payment-settings" element={<AdminPaymentSettings />} />
             <Route path="/admin/contacts" element={<AdminContacts />} />
             <Route path="/admin/users" element={<AdminUsers />} />
             <Route path="/admin/subscriptions" element={<AdminSubscriptions />} />

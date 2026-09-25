@@ -19,6 +19,7 @@ import MarketingHeader from "@/components/MarketingHeader";
 import SiteFooter from "@/components/SiteFooter";
 import Seo from "@/components/Seo";
 import { LeadMagnetModal } from "@/components/LeadMagnetModal";
+import { trackEvent } from "@/lib/analytics";
 
 const features = [
   { icon: FileSpreadsheet, title: "Excel / CSV upload", desc: "Drop any list — students, staff, members, event attendees. We auto-detect Name, ID, Class and more." },
@@ -53,7 +54,7 @@ const faqs = [
 export default function Landing() {
   const [leadOpen, setLeadOpen] = useState(false);
   const [leadSource, setLeadSource] = useState("landing_hero");
-  const openLead = (source: string) => { setLeadSource(source); setLeadOpen(true); };
+  const openLead = (source: string) => { setLeadSource(source); setLeadOpen(true); void trackEvent("lead_opened", source); };
   const jsonLd = [
     {
       "@context": "https://schema.org",
@@ -106,7 +107,7 @@ export default function Landing() {
               <Gift className="h-4 w-4" /> Get free sample on WhatsApp
             </Button>
             <Button asChild size="lg" variant="outline" className="text-base h-12 px-6">
-              <Link to="/app">
+              <Link to="/app" onClick={() => void trackEvent("try_free_click", "landing_hero")}>
                 Try live now — no signup <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
@@ -173,10 +174,10 @@ export default function Landing() {
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {audiences.map((a) => (
-            <div key={a.title} className="rounded-xl border bg-card p-6">
+            <Link key={a.title} to={a.title === "Photographers" ? "/id-card-maker-for-photographers" : a.title === "Print shops" ? "/id-card-software-for-print-shops" : a.title === "Schools & colleges" ? "/school-id-card-maker" : "/employee-id-card-maker"} className="rounded-lg border bg-card p-6 hover:border-primary/50 transition-colors">
               <h3 className="font-semibold mb-1.5">{a.title}</h3>
               <p className="text-sm text-muted-foreground">{a.desc}</p>
-            </div>
+            </Link>
           ))}
         </div>
       </section>

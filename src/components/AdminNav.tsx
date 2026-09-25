@@ -1,8 +1,10 @@
 import { NavLink } from "react-router-dom";
-import { CreditCard, MessageSquare, Users, Crown, Gift } from "lucide-react";
+import { BarChart3, CreditCard, MessageSquare, Users, Crown, Gift, Settings } from "lucide-react";
 
 const links = [
+  { to: "/admin", label: "Overview", icon: BarChart3 },
   { to: "/admin/payments", label: "Payments", icon: CreditCard },
+  { to: "/admin/payment-settings", label: "UPI settings", icon: Settings },
   { to: "/admin/leads", label: "Leads", icon: Gift },
   { to: "/admin/contacts", label: "Contacts", icon: MessageSquare },
   { to: "/admin/users", label: "Users", icon: Users },

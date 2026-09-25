@@ -12,18 +12,18 @@ interface SitemapEntry {
   priority?: string;
 }
 
-const today = new Date().toISOString().split("T")[0];
-
 const entries: SitemapEntry[] = [
-  { path: "/", lastmod: today, changefreq: "weekly", priority: "1.0" },
-  { path: "/templates", lastmod: today, changefreq: "monthly", priority: "0.9" },
-  { path: "/pricing", lastmod: today, changefreq: "monthly", priority: "0.9" },
-  { path: "/app", lastmod: today, changefreq: "weekly", priority: "0.8" },
-  { path: "/contact", lastmod: today, changefreq: "monthly", priority: "0.5" },
-  { path: "/privacy", lastmod: today, changefreq: "yearly", priority: "0.3" },
-  { path: "/terms", lastmod: today, changefreq: "yearly", priority: "0.3" },
-  { path: "/refund", lastmod: today, changefreq: "yearly", priority: "0.3" },
-  { path: "/auth", lastmod: today, changefreq: "yearly", priority: "0.3" },
+  { path: "/", changefreq: "weekly", priority: "1.0" },
+  { path: "/templates", changefreq: "monthly", priority: "0.9" },
+  { path: "/pricing", changefreq: "monthly", priority: "0.9" },
+  { path: "/id-card-maker-for-photographers", changefreq: "monthly", priority: "0.9" },
+  { path: "/id-card-software-for-print-shops", changefreq: "monthly", priority: "0.9" },
+  { path: "/bulk-id-card-maker-from-excel", changefreq: "monthly", priority: "0.9" },
+  { path: "/app", changefreq: "weekly", priority: "0.8" },
+  { path: "/contact", changefreq: "monthly", priority: "0.5" },
+  { path: "/privacy", changefreq: "yearly", priority: "0.3" },
+  { path: "/terms", changefreq: "yearly", priority: "0.3" },
+  { path: "/refund", changefreq: "yearly", priority: "0.3" },
 ];
 
 function generateSitemap(entries: SitemapEntry[]) {

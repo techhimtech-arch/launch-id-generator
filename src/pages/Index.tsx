@@ -10,6 +10,7 @@ import { loadState } from "@/lib/persistence";
 import { toast } from "@/hooks/use-toast";
 import AppHeader from "@/components/AppHeader";
 import Seo from "@/components/Seo";
+import { trackEvent } from "@/lib/analytics";
 
 const Index = () => {
   const step = useIdStore((s) => s.step);
@@ -17,6 +18,7 @@ const Index = () => {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
+    void trackEvent("app_started", "app");
     let mounted = true;
     loadState().then((s) => {
       if (!mounted) return;

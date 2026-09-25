@@ -6,7 +6,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Loader2, Copy, Check, Smartphone } from "lucide-react";
 import { z } from "zod";
-import { UPI_CONFIG, buildUpiQrUrl, buildUpiUri } from "@/lib/upi-config";
+import { buildPaymentQrUrl, buildPaymentUri, usePaymentSettings } from "@/hooks/usePaymentSettings";
+import { trackEvent } from "@/lib/analytics";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
@@ -28,6 +29,7 @@ export function UpiPayModal({
   onSubmitted?: () => void;
 }) {
   const { user } = useAuth();
+  const { settings, loading: settingsLoading } = usePaymentSettings();
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
   const [form, setForm] = useState({ upi_ref: "", payer_name: "", payer_phone: "", note: "" });
@@ -49,7 +51,7 @@ export function UpiPayModal({
     const { error } = await supabase.from("payment_requests").insert({
       user_id: user.id,
       user_email: user.email,
-      amount: UPI_CONFIG.amount,
+      amount: settings.amount,
       upi_ref: parsed.data.upi_ref,
       payer_name: parsed.data.payer_name || null,
       payer_phone: parsed.data.payer_phone || null,
@@ -65,25 +67,28 @@ export function UpiPayModal({
       title: "Submitted for review ✅",
       description: "We'll verify your UPI payment and activate Pro within a few hours.",
     });
+    void trackEvent("payment_submitted", "upi_modal", { amount: settings.amount });
     setForm({ upi_ref: "", payer_name: "", payer_phone: "", note: "" });
     onOpenChange(false);
     onSubmitted?.();
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={(value) => { onOpenChange(value); if (value) void trackEvent("payment_opened", "pricing"); }}>
       <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Pay ₹{UPI_CONFIG.amount} via UPI</DialogTitle>
+          <DialogTitle>Pay ₹{settings.amount} via UPI</DialogTitle>
           <DialogDescription>
             Scan the QR or send via any UPI app, then paste the transaction ID below. Pro will be activated after manual verification (usually within a few hours).
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid sm:grid-cols-2 gap-4 mt-2">
+        {!settings.payments_enabled ? (
+          <div className="rounded-md border bg-muted/30 p-4 text-sm text-muted-foreground">UPI payments are temporarily unavailable. Please contact support and we will help you.</div>
+        ) : <><div className="grid sm:grid-cols-2 gap-4 mt-2">
           <div className="flex flex-col items-center text-center rounded-lg border p-4 bg-muted/30">
             <img
-              src={buildUpiQrUrl(220)}
+              src={buildPaymentQrUrl(settings, 220)}
               alt="UPI QR code"
               width={220}
               height={220}
@@ -96,7 +101,7 @@ export function UpiPayModal({
             <div>
               <div className="text-muted-foreground text-xs">UPI ID</div>
               <div className="flex items-center gap-2">
-                <code className="font-mono text-sm break-all">{UPI_CONFIG.upiId}</code>
+                <code className="font-mono text-sm break-all">{settings.upi_id}</code>
                 <Button size="icon" variant="ghost" className="h-7 w-7" onClick={copy}>
                   {copied ? <Check className="h-3.5 w-3.5 text-primary" /> : <Copy className="h-3.5 w-3.5" />}
                 </Button>
@@ -104,13 +109,13 @@ export function UpiPayModal({
             </div>
             <div>
               <div className="text-muted-foreground text-xs">Payee</div>
-              <div>{UPI_CONFIG.payeeName}</div>
+                <div>{settings.payee_name}</div>
             </div>
             <div>
               <div className="text-muted-foreground text-xs">Amount</div>
-              <div className="font-semibold">₹{UPI_CONFIG.amount}.00</div>
+               <div className="font-semibold">₹{settings.amount}.00</div>
             </div>
-            <a href={buildUpiUri()} className="inline-flex">
+            <a href={buildPaymentUri(settings)} className="inline-flex">
               <Button variant="outline" size="sm" className="gap-2">
                 <Smartphone className="h-3.5 w-3.5" /> Open UPI app
               </Button>
@@ -164,11 +169,11 @@ export function UpiPayModal({
             />
           </div>
 
-          <Button className="w-full" onClick={submit} disabled={busy}>
+          <Button className="w-full" onClick={submit} disabled={busy || settingsLoading}>
             {busy && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
             Submit for verification
           </Button>
-        </div>
+        </div></>}
       </DialogContent>
     </Dialog>
   );
