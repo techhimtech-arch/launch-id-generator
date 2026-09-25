@@ -9,6 +9,7 @@ import { toast } from "@/hooks/use-toast";
 import { CheckCircle2, Gift, MessageCircle, ArrowRight, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { z } from "zod";
+import { trackEvent } from "@/lib/analytics";
 
 const OWNER_WA = "919816531995";
 
@@ -66,6 +67,7 @@ export function LeadMagnetModal({ open, onOpenChange, source = "landing_hero" }:
       return;
     }
     setDone(true);
+    void trackEvent("lead_submitted", source);
     // Auto-open WhatsApp with pre-filled message to the owner
     const msg =
       `Hi! Mujhe ID Card Studio ka free sample chahiye.%0A` +

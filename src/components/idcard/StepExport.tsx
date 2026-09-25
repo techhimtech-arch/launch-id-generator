@@ -15,6 +15,7 @@ import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/hooks/useAuth";
 import { UpgradeModal } from "@/components/UpgradeModal";
 import { getExportUsage, incrementExportUsage, FREE_LIMIT } from "@/lib/export-trial";
+import { trackEvent } from "@/lib/analytics";
 
 type PageSizeKey = "a4" | "a4-landscape" | "letter" | "a3";
 type CutStyle = "none" | "corners" | "grid";
@@ -159,6 +160,7 @@ export default function StepExport() {
       } else {
         doc.save(`id-cards-${Date.now()}.pdf`);
         if (showWatermark) {
+          void trackEvent("free_export", "app", { card_count: students.length });
           const next = incrementExportUsage();
           setUsage(next);
           toast({

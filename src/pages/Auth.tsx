@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import Seo from "@/components/Seo";
+import { trackEvent } from "@/lib/analytics";
 
 export default function Auth() {
   const [busy, setBusy] = useState(false);
@@ -23,6 +24,7 @@ export default function Auth() {
       });
       if (result.error) throw result.error;
       if (result.redirected) return;
+      void trackEvent("google_sign_in", "auth");
       nav("/app", { replace: true });
     } catch (err: any) {
       toast({ title: "Google sign-in failed", description: err.message ?? String(err), variant: "destructive" });

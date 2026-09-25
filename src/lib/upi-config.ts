@@ -7,8 +7,8 @@ export const UPI_CONFIG = {
   note: "ID Card Studio Pro",
 };
 
-export function buildUpiUri() {
-  const { upiId, payeeName, amount, note } = UPI_CONFIG;
+export function buildUpiUri(config = UPI_CONFIG) {
+  const { upiId, payeeName, amount, note } = config;
   const params = new URLSearchParams({
     pa: upiId,
     pn: payeeName,
@@ -19,7 +19,7 @@ export function buildUpiUri() {
   return `upi://pay?${params.toString()}`;
 }
 
-export function buildUpiQrUrl(size = 240) {
-  const data = encodeURIComponent(buildUpiUri());
+export function buildUpiQrUrl(size = 240, config = UPI_CONFIG) {
+  const data = encodeURIComponent(buildUpiUri(config));
   return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${data}`;
 }
