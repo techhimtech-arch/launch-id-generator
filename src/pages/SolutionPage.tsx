@@ -50,7 +50,6 @@ export default function SolutionPage({ kind }: { kind: Kind }) {
         </ul>
         <div className="mt-10 flex flex-wrap gap-3">
           <Button asChild size="lg"><Link to="/app">Start free trial</Link></Button>
-          <Button asChild size="lg" variant="outline"><a href="/downloads/sample-id-cards.pdf" download>Download sample PDF</a></Button>
         </div>
       </main>
       <SiteFooter />
