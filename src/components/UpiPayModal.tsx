@@ -35,7 +35,7 @@ export function UpiPayModal({
   const [form, setForm] = useState({ upi_ref: "", payer_name: "", payer_phone: "", note: "" });
 
   const copy = async () => {
-    await navigator.clipboard.writeText(UPI_CONFIG.upiId);
+    await navigator.clipboard.writeText(settings.upi_id);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   };
